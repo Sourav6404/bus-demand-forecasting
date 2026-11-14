@@ -1,0 +1,9 @@
+city_id,city_name,state,tier,population,latitude,longitude,urban_scale_score,employment_score,education_score,tourism_score,economic_activity_score,migration_score,demand_generation_index,demand_attraction_index,city_mobility_index
+BLR,Bengaluru,Karnataka,1,13600000,12.9716,77.5946,9.6,9.8,9.2,6.8,9.7,9.5,9.61,8.99,9.77
+MAA,Chennai,Tamil Nadu,1,11500000,13.0827,80.2707,9.4,9.3,9.1,7.5,9.3,8.7,9.2,8.88,9.49
+CCJ,Kozhikode,Kerala,2,2050000,11.2588,75.7804,6.8,6.7,8.1,7.6,7.1,6.6,6.93,7.26,7.09
+CJB,Coimbatore,Tamil Nadu,2,2900000,11.0168,76.9558,7.3,8.2,8.5,7.0,7.9,6.9,7.68,7.83,7.75
+COK,Kochi,Kerala,2,2150000,9.9312,76.2673,7.1,7.6,7.8,9.1,8.0,7.4,7.52,8.02,7.77
+MYS,Mysuru,Karnataka,2,1320000,12.2958,76.6394,6.2,6.5,7.4,9.3,6.4,5.8,6.36,7.22,6.79
+TCR,Thrissur,Kerala,2,1050000,10.5276,76.2144,5.9,6.2,7.5,8.8,6.7,5.9,6.29,7.1,6.7
+TRV,Thiruvananthapuram,Kerala,2,1720000,8.5241,76.9366,6.9,7.4,8.3,8.4,7.3,6.7,7.2,7.71,7.46
