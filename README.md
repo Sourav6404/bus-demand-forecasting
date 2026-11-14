@@ -26,6 +26,7 @@ Intercity passenger bus operations require precise demand forecasting to optimiz
   - **Kozhikode (CCJ)** – Kerala (Tier 2)
   - **Thrissur (TCR)** – Kerala (Tier 2)
   - **Thiruvananthapuram (TVM)** – Kerala (Tier 2)
+- **Route Network:** 20 directed intercity bus routes connecting the 8 hubs across 10 strategic bidirectional corridors. All route distances, journey durations, commercial speeds, and route demand multipliers are synthetic scenario modeling assumptions calibrated for prototype simulation.
 
 ---
 
@@ -102,6 +103,19 @@ pip install -r requirements.txt
 All simulation components reference a centralized deterministic seed (`RANDOM_SEED = 42`). Verify your configuration setup with:
 ```bash
 python -c "import src.config as cfg; print(f'Config OK: {cfg.SIMULATION_YEARS} years, {len(cfg.TARGET_CITIES)} cities, seed={cfg.DEFAULT_RANDOM_SEED}')"
+```
+
+### 5. Generate City and Route Profiles
+Generate the validated base datasets:
+```bash
+# 1. Generate 8 scenario-based city profiles
+python src/data/generate_city_profiles.py
+
+# 2. Generate 20 directed intercity route profiles
+python src/data/generate_route_profiles.py
+
+# 3. Run full automated test suite
+pytest tests/ -v
 ```
 
 ---

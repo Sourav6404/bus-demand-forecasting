@@ -60,7 +60,77 @@ Each of the 8 cities is assigned synthetic component scores normalized on a **0.
 
 ---
 
-## 4. Behavioral Demand Dynamics & Modifiers
+## 4. Directed Route Network Topology & Corridor Modelling
+
+Stage 4 establishes a directed intercity bus route network comprising **20 directed routes** spanning 10 strategic bidirectional corridors between the 8 South Indian urban hubs.
+
+> [!IMPORTANT]
+> **Synthetic Modelling Assumptions Notice:** All route distances, journey durations, commercial speeds, and route demand multipliers in this project are synthetic modelling assumptions constructed for prototype demand simulation. They do **not** represent official measurements, certified transit schedules, or empirical telemetry from road transport authorities (such as NHAI, KSRTC, SETC, or private operators).
+
+### A. Directed Asymmetry & Static Multiplier Definition
+A route from city $A \to B$ and its reverse $B \to A$ are treated as independent directed routes with separate `route_id`s, independent tracking, and distinct `route_demand_multiplier`s:
+- **Static Scenario Adjustment:** The `route_demand_multiplier` is a **static, direction-specific baseline scenario calibration factor** that captures structural corridor characteristics (such as baseline commercial exchange density, highway corridor quality, or established migrant catchment size).
+- **Strict Separation from Temporal Effects:** The `route_demand_multiplier` does **not** model temporal variations such as Friday/Sunday weekend spikes, day-of-week cycles, holiday surges, or festival effects. All temporal, calendar, and seasonal dynamics are modelled dynamically as separate time-varying multipliers in subsequent simulation stages.
+- **Directional Baseline Calibration:** Corridors originating in high-employment Tier 1 metropolises (e.g., Bengaluru $\to$ Kochi: 1.28, Bengaluru $\to$ Chennai: 1.25) exhibit elevated baseline multipliers reflecting structural outbound workforce and student mobility, while reverse journeys (e.g., Kochi $\to$ Bengaluru: 1.25, Chennai $\to$ Bengaluru: 1.22) reflect steady baseline return flows.
+
+### B. Route Features & Formulations
+1. **Distance ($d_{ij}$):** Synthetic road distance in kilometers based on illustrative highway alignments (NH 48, NH 544, NH 66, NH 766).
+2. **Estimated Duration ($t_{ij}$):** Synthetic intercity bus journey time in hours, incorporating illustrative urban terminal clearance, passenger stops, and terrain friction.
+3. **Average Commercial Speed ($v_{ij}$):**
+   $$v_{ij} = \frac{d_{ij}}{t_{ij}}$$
+   *Synthetic speed assumptions range between 37.5 km/h and 53.7 km/h:*
+   - Flat expressway corridors (e.g., Chennai $\leftrightarrow$ Coimbatore: ~53.7 km/h, Bengaluru $\leftrightarrow$ Chennai: ~53.1 km/h).
+   - Ghat sections and hilly terrain (e.g., Bengaluru $\leftrightarrow$ Kozhikode via Wayanad: ~45.0 km/h).
+   - Dense ribbon-development coastal highways (e.g., Kochi $\leftrightarrow$ Kozhikode: ~37.5 km/h, Kochi $\leftrightarrow$ Thiruvananthapuram: ~38.2 km/h).
+4. **Origin Generation Index ($DGI_o$) & Destination Attraction Index ($DAI_d$):** Directionally mapped from the base city profile table.
+5. **Route Mobility Score ($RMS_{ij}$):**
+   $$RMS_{ij} = \frac{DGI_o + DAI_d}{2}$$
+   Represents a combined linear summary score of the corridor's bilateral mobility potential.
+6. **Fleet Bus Capacity:** Standardized to 45 seats per departure coach.
+
+### C. Role in Upcoming Passenger-Demand Formula & Avoiding Double-Counting
+In the upcoming behavioral passenger-demand simulation stage, daily departure-level demand will be generated using an extended Gravity Model formulation:
+
+$$\text{BaseDemand}_{ij} \propto f(\text{Mobility}_{ij}) \cdot \frac{1}{d_{ij}^\gamma} \cdot \text{route\_demand\_multiplier}_{ij}$$
+
+Where:
+- **Avoiding Double-Counting of Mobility Indices:** The simulator must choose **either** the granular directional product $(DGI_o \cdot DAI_d)$ **or** the combined summary `route_mobility_score` ($RMS_{ij}$). **Under no circumstances should both terms be multiplied together.** Multiplying both would apply the city generation and attraction factors twice, artificially compounding metropolitan scale and distorting the gravity curve.
+- **Role of `route_demand_multiplier`:** Modulates the baseline corridor passenger volume as a static exogenous weight ($M_{ij}$), ensuring corridor-specific trade and migration intensity is respected independently of city size and distance.
+- **Separation of Concerns:** The static base demand is subsequently modulated by dynamic temporal modifiers (Day-of-Week multiplier, Seasonal/Festival surge multiplier, and Departure-slot preference) without conflating static corridor weights with temporal shocks.
+
+### D. 20-Route Network Overview
+*Note: All numerical values below are synthetic prototype scenario assumptions.*
+
+| Route ID | Origin $\to$ Destination | Distance (km) | Duration (hrs) | Speed (km/h) | Mobility Score | Demand Multiplier | Scenario Rationale |
+|---|---|---|---|---|---|---|---|
+| `R_BLR_MYS` | Bengaluru $\to$ Mysuru | 145.0 | 3.0 | 48.33 | 0.7878 | 1.10 | Expressway weekend tourism and commuter corridor |
+| `R_MYS_BLR` | Mysuru $\to$ Bengaluru | 145.0 | 3.0 | 48.33 | 0.7065 | 1.08 | Commuter and student return flow to state capital |
+| `R_BLR_MAA` | Bengaluru $\to$ Chennai | 345.0 | 6.5 | 53.08 | 0.9095 | 1.25 | Metropolitan IT and manufacturing business corridor |
+| `R_MAA_BLR` | Chennai $\to$ Bengaluru | 345.0 | 6.5 | 53.08 | 0.9018 | 1.22 | Metropolitan commercial and workforce reverse flow |
+| `R_BLR_CCJ` | Bengaluru $\to$ Kozhikode | 360.0 | 8.0 | 45.00 | 0.8032 | 1.15 | Ghat corridor connecting Malabar diaspora and students |
+| `R_CCJ_BLR` | Kozhikode $\to$ Bengaluru | 360.0 | 8.0 | 45.00 | 0.7785 | 1.12 | Malabar return travel to Bengaluru employment market |
+| `R_BLR_TCR` | Bengaluru $\to$ Thrissur | 470.0 | 9.5 | 49.47 | 0.7900 | 1.12 | Long-distance overnight cultural and commercial connection |
+| `R_TCR_BLR` | Thrissur $\to$ Bengaluru | 470.0 | 9.5 | 49.47 | 0.7488 | 1.10 | Central Kerala workforce return flow |
+| `R_BLR_COK` | Bengaluru $\to$ Kochi | 540.0 | 11.0 | 49.09 | 0.8868 | 1.28 | High-volume tech workforce and tourism sleeper route |
+| `R_COK_BLR` | Kochi $\to$ Bengaluru | 540.0 | 11.0 | 49.09 | 0.8230 | 1.25 | Kochi port and IT diaspora return flow to Bengaluru |
+| `R_MAA_CBE` | Chennai $\to$ Coimbatore | 510.0 | 9.5 | 53.68 | 0.8212 | 1.18 | Industrial and educational connector between TN hubs |
+| `R_CBE_MAA` | Coimbatore $\to$ Chennai | 510.0 | 9.5 | 53.68 | 0.8102 | 1.15 | Textile and engineering commercial travel to state capital |
+| `R_CBE_COK` | Coimbatore $\to$ Kochi | 190.0 | 4.5 | 42.22 | 0.7875 | 1.05 | Palakkad Gap regional trade and airport feeder route |
+| `R_COK_CBE` | Kochi $\to$ Coimbatore | 190.0 | 4.5 | 42.22 | 0.7425 | 1.02 | Regional commercial and industrial feeder route |
+| `R_COK_CCJ` | Kochi $\to$ Kozhikode | 180.0 | 4.8 | 37.50 | 0.7120 | 1.06 | Coastal business, trade, and medical connection |
+| `R_CCJ_COK` | Kozhikode $\to$ Kochi | 180.0 | 4.8 | 37.50 | 0.7510 | 1.04 | Malabar regional travel to commercial capital |
+| `R_COK_TVM` | Kochi $\to$ Thiruvananthapuram | 210.0 | 5.5 | 38.18 | 0.7548 | 1.12 | Commercial to administrative and Technopark connector |
+| `R_TVM_COK` | Thiruvananthapuram $\to$ Kochi | 210.0 | 5.5 | 38.18 | 0.7777 | 1.10 | Administrative capital to port city commercial return flow |
+| `R_CCJ_TCR` | Kozhikode $\to$ Thrissur | 115.0 | 3.0 | 38.33 | 0.6542 | 0.95 | Regional transit connecting Malabar and cultural capital |
+| `R_TCR_CCJ` | Thrissur $\to$ Kozhikode | 115.0 | 3.0 | 38.33 | 0.6378 | 0.92 | Regional trade and education feeder route |
+
+### E. Assumptions & Limitations
+- **Synthetic Modelling Assumptions:** Distances, journey durations, commercial speeds, and route demand multipliers are illustrative approximations designed for benchmark simulation rather than live GPS telemetry or certified road transport schedules.
+- **Topological Boundary:** The 20 routes form a connected graph covering all 8 hubs; non-direct pairs (e.g., Mysuru $\leftrightarrow$ Thiruvananthapuram) are assumed to operate via multi-leg transfers or outside the core 20-corridor prototype scope.
+
+---
+
+## 5. Behavioral Demand Dynamics & Modifiers
 
 Synthetic daily demand incorporates non-linear multiplicative factors representing real passenger behavior:
 
