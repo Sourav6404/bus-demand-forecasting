@@ -22,7 +22,13 @@ if str(project_root) not in sys.path:
 
 import numpy as np
 import pandas as pd
-from src.config import RAW_DATA_DIR, SIMULATION_END_DATE, SIMULATION_START_DATE
+from src.config import (
+    FUTURE_CALENDAR_PATH,
+    FUTURE_DATA_DIR,
+    RAW_DATA_DIR,
+    SIMULATION_END_DATE,
+    SIMULATION_START_DATE,
+)
 
 # ---------------------------------------------------------------------------
 # Official State Government & National Holiday Events Registry (2024-2026)
@@ -251,6 +257,84 @@ OFFICIAL_HOLIDAY_EVENTS: List[Dict[str, Any]] = [
     {"holiday_id": "H_2026_NAT_003", "date": "2026-10-02", "holiday_name": "Mahatma Gandhi Jayanti", "state": "ALL", "year": 2026, "is_gazetted": True, "is_national": True, "verification_status": "verified_official_gazette", "source_name": "Ministry of Personnel, Govt of India", "source_url": "https://dopt.gov.in", "notes": "National holiday"},
 ]
 
+# ---------------------------------------------------------------------------
+# Projected State & National Holiday Events for 2027
+# Used exclusively for future calendar feature construction and out-of-sample
+# inference. Clearly distinguished by verification_status.
+# ---------------------------------------------------------------------------
+PROJECTED_2027_HOLIDAY_EVENTS: List[Dict[str, Any]] = [
+    # National Holidays 2027 (Statutory Fixed Annual Observances)
+    {"holiday_id": "H_2027_NAT_001", "date": "2027-01-26", "holiday_name": "Republic Day", "state": "ALL", "year": 2027, "is_gazetted": True, "is_national": True, "verification_status": "projected_statutory_holiday", "source_name": "Central Govt Statutory Holiday Framework", "source_url": "https://dopt.gov.in", "notes": "National holiday established by central statute; observed annually on fixed date"},
+    {"holiday_id": "H_2027_NAT_002", "date": "2027-08-15", "holiday_name": "Independence Day", "state": "ALL", "year": 2027, "is_gazetted": True, "is_national": True, "verification_status": "projected_statutory_holiday", "source_name": "Central Govt Statutory Holiday Framework", "source_url": "https://dopt.gov.in", "notes": "National holiday established by central statute; observed annually on fixed date"},
+    {"holiday_id": "H_2027_NAT_003", "date": "2027-10-02", "holiday_name": "Mahatma Gandhi Jayanti", "state": "ALL", "year": 2027, "is_gazetted": True, "is_national": True, "verification_status": "projected_statutory_holiday", "source_name": "Central Govt Statutory Holiday Framework", "source_url": "https://dopt.gov.in", "notes": "National holiday established by central statute; observed annually on fixed date"},
+
+    # Tamil Nadu 2027 Projections
+    {"holiday_id": "H_2027_TN_001", "date": "2027-01-01", "holiday_name": "New Year's Day", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Govt of Tamil Nadu Annual Holiday Framework", "source_url": "https://www.tn.gov.in", "notes": "Annual statutory public holiday under NI Act"},
+    {"holiday_id": "H_2027_TN_002", "date": "2027-01-14", "holiday_name": "Pongal", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Tamil Solar Calendar Projection", "source_url": "https://www.tn.gov.in", "notes": "Thai Pongal harvest festival; astronomical projection"},
+    {"holiday_id": "H_2027_TN_003", "date": "2027-01-15", "holiday_name": "Thiruvalluvar Day", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Tamil Nadu Festival Calendar", "source_url": "https://www.tn.gov.in", "notes": "Pongal sequence day 2; statutory public holiday"},
+    {"holiday_id": "H_2027_TN_004", "date": "2027-01-16", "holiday_name": "Uzhavar Thirunal", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Tamil Nadu Festival Calendar", "source_url": "https://www.tn.gov.in", "notes": "Farmers festival holiday"},
+    {"holiday_id": "H_2027_TN_005", "date": "2027-01-22", "holiday_name": "Thai Poosam", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Tamil Nadu Temple Calendar", "source_url": "https://www.tn.gov.in", "notes": "Thai Pusam full moon day"},
+    {"holiday_id": "H_2027_TN_006", "date": "2027-03-10", "holiday_name": "Ramzan (Eid-ul-Fitr)", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://www.tn.gov.in", "notes": "Approximate lunar observation; subject to state gazette confirmation"},
+    {"holiday_id": "H_2027_TN_007", "date": "2027-03-26", "holiday_name": "Good Friday", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Ecclesiastical Calendar", "source_url": "https://www.tn.gov.in", "notes": "Christian observance; Easter Friday"},
+    {"holiday_id": "H_2027_TN_008", "date": "2027-04-07", "holiday_name": "Telugu New Year's Day", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Chaitra Shukla Pratipada", "source_url": "https://www.tn.gov.in", "notes": "Ugadi celebration"},
+    {"holiday_id": "H_2027_TN_009", "date": "2027-04-14", "holiday_name": "Tamil New Year's Day / Dr. B.R. Ambedkar Jayanthi", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Tamil Solar Calendar", "source_url": "https://www.tn.gov.in", "notes": "Chithirai 1 / Ambedkar Birthday"},
+    {"holiday_id": "H_2027_TN_010", "date": "2027-05-01", "holiday_name": "May Day", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Govt of Tamil Nadu Annual Holiday Framework", "source_url": "https://www.tn.gov.in", "notes": "International Labour Day"},
+    {"holiday_id": "H_2027_TN_011", "date": "2027-05-17", "holiday_name": "Bakrid (Eid al-Adha)", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://www.tn.gov.in", "notes": "Subject to moon sighting"},
+    {"holiday_id": "H_2027_TN_012", "date": "2027-06-16", "holiday_name": "Muharram", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://www.tn.gov.in", "notes": "Ashura day; subject to moon sighting"},
+    {"holiday_id": "H_2027_TN_013", "date": "2027-08-16", "holiday_name": "Milad-un-Nabi", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://www.tn.gov.in", "notes": "Subject to moon sighting"},
+    {"holiday_id": "H_2027_TN_014", "date": "2027-08-25", "holiday_name": "Krishna Jayanthi", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Tamil Nadu Religious Calendar", "source_url": "https://www.tn.gov.in", "notes": "Gokulashtami"},
+    {"holiday_id": "H_2027_TN_015", "date": "2027-09-04", "holiday_name": "Vinayakar Chathurthi", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Tamil Nadu Religious Calendar", "source_url": "https://www.tn.gov.in", "notes": "Ganesh Chaturthi"},
+    {"holiday_id": "H_2027_TN_016", "date": "2027-10-09", "holiday_name": "Ayutha Pooja", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Tamil Nadu Festival Calendar", "source_url": "https://www.tn.gov.in", "notes": "Mahanavami / Ayutha Pooja"},
+    {"holiday_id": "H_2027_TN_017", "date": "2027-10-10", "holiday_name": "Vijaya Dasami", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Tamil Nadu Festival Calendar", "source_url": "https://www.tn.gov.in", "notes": "Dussehra culmination"},
+    {"holiday_id": "H_2027_TN_018", "date": "2027-10-29", "holiday_name": "Deepavali", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Tamil Nadu Festival Calendar", "source_url": "https://www.tn.gov.in", "notes": "Diwali Festival of Lights"},
+    {"holiday_id": "H_2027_TN_019", "date": "2027-12-25", "holiday_name": "Christmas", "state": "TN", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Govt of Tamil Nadu Annual Holiday Framework", "source_url": "https://www.tn.gov.in", "notes": "Christmas Day"},
+
+    # Karnataka 2027 Projections
+    {"holiday_id": "H_2027_KA_001", "date": "2027-01-14", "holiday_name": "Makara Sankranti", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Harvest festival"},
+    {"holiday_id": "H_2027_KA_002", "date": "2027-03-06", "holiday_name": "Maha Shivaratri", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Religious holiday"},
+    {"holiday_id": "H_2027_KA_003", "date": "2027-03-10", "holiday_name": "Khutub-E-Ramzan", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://dpar.karnataka.gov.in", "notes": "Id-ul-Fitr; subject to moon sighting"},
+    {"holiday_id": "H_2027_KA_004", "date": "2027-03-26", "holiday_name": "Good Friday", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Christian observance"},
+    {"holiday_id": "H_2027_KA_005", "date": "2027-04-07", "holiday_name": "Ugadi Festival", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Kannada New Year"},
+    {"holiday_id": "H_2027_KA_006", "date": "2027-04-14", "holiday_name": "Dr. B.R. Ambedkar Jayanthi", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Ambedkar Birthday"},
+    {"holiday_id": "H_2027_KA_007", "date": "2027-04-29", "holiday_name": "Basava Jayanthi / Akshaya Tritiya", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Philosopher Basavanna Birth Anniversary"},
+    {"holiday_id": "H_2027_KA_008", "date": "2027-05-01", "holiday_name": "May Day", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Labour Day"},
+    {"holiday_id": "H_2027_KA_009", "date": "2027-05-17", "holiday_name": "Bakrid", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://dpar.karnataka.gov.in", "notes": "Id-ul-Adha; subject to moon sighting"},
+    {"holiday_id": "H_2027_KA_010", "date": "2027-06-16", "holiday_name": "Last Day of Moharram", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://dpar.karnataka.gov.in", "notes": "Ashura observance"},
+    {"holiday_id": "H_2027_KA_011", "date": "2027-08-16", "holiday_name": "Eid-Milad", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://dpar.karnataka.gov.in", "notes": "Milad-un-Nabi"},
+    {"holiday_id": "H_2027_KA_012", "date": "2027-09-04", "holiday_name": "Varasiddhi Vinayaka Vrata", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Ganesh Chaturthi"},
+    {"holiday_id": "H_2027_KA_013", "date": "2027-10-09", "holiday_name": "Mahanavami / Ayudha Pooja", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Dasara festival peak"},
+    {"holiday_id": "H_2027_KA_014", "date": "2027-10-10", "holiday_name": "Vijayadasami", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Mysuru Dasara procession day"},
+    {"holiday_id": "H_2027_KA_015", "date": "2027-10-15", "holiday_name": "Maharshi Valmiki Jayanthi", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Sage Valmiki Birthday"},
+    {"holiday_id": "H_2027_KA_016", "date": "2027-10-29", "holiday_name": "Naraka Chaturdashi", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Diwali day 1"},
+    {"holiday_id": "H_2027_KA_017", "date": "2027-10-31", "holiday_name": "Balipadyami / Deepavali", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Diwali day 2"},
+    {"holiday_id": "H_2027_KA_018", "date": "2027-11-01", "holiday_name": "Kannada Rajyotsava", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Karnataka State Formation Day"},
+    {"holiday_id": "H_2027_KA_019", "date": "2027-11-16", "holiday_name": "Kanakadasa Jayanthi", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Saint Kanakadasa Birthday"},
+    {"holiday_id": "H_2027_KA_020", "date": "2027-12-25", "holiday_name": "Christmas", "state": "KA", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Karnataka DPAR Holiday Framework", "source_url": "https://dpar.karnataka.gov.in", "notes": "Christmas Day"},
+
+    # Kerala 2027 Projections
+    {"holiday_id": "H_2027_KL_001", "date": "2027-01-02", "holiday_name": "Mannam Jayanthi", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Social reformer Mannathu Padmanabhan Birthday"},
+    {"holiday_id": "H_2027_KL_002", "date": "2027-03-06", "holiday_name": "Sivarathri", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Aluva Sivarathri festival"},
+    {"holiday_id": "H_2027_KL_003", "date": "2027-03-10", "holiday_name": "Id-ul-Fitr (Ramzan)", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://kerala.gov.in", "notes": "Subject to moon sighting"},
+    {"holiday_id": "H_2027_KL_004", "date": "2027-03-25", "holiday_name": "Maundy Thursday", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Holy Thursday"},
+    {"holiday_id": "H_2027_KL_005", "date": "2027-03-26", "holiday_name": "Good Friday", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Good Friday"},
+    {"holiday_id": "H_2027_KL_006", "date": "2027-04-14", "holiday_name": "Dr. B.R. Ambedkar Jayanthi", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Ambedkar Birthday"},
+    {"holiday_id": "H_2027_KL_007", "date": "2027-04-15", "holiday_name": "Vishu", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Malayalam New Year harvest day"},
+    {"holiday_id": "H_2027_KL_008", "date": "2027-05-01", "holiday_name": "May Day", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Workers Day"},
+    {"holiday_id": "H_2027_KL_009", "date": "2027-05-17", "holiday_name": "Bakrid (Id-ul-Adha)", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://kerala.gov.in", "notes": "Sacrifice feast; subject to moon sighting"},
+    {"holiday_id": "H_2027_KL_010", "date": "2027-06-16", "holiday_name": "Muharram", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "uncertain_lunar_observation", "source_name": "Islamic Hijri Calendar Projection", "source_url": "https://kerala.gov.in", "notes": "Islamic New Year day"},
+    {"holiday_id": "H_2027_KL_011", "date": "2027-08-02", "holiday_name": "Karkkadaka Vaavu", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Ancestral ritual day"},
+    {"holiday_id": "H_2027_KL_012", "date": "2027-08-16", "holiday_name": "Sree Narayana Guru Jayanthi / Milad-i-Sherif", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "SNDP Guru Jayanthi"},
+    {"holiday_id": "H_2027_KL_013", "date": "2027-08-25", "holiday_name": "Sreekrishna Jayanthi", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Janmashtami"},
+    {"holiday_id": "H_2027_KL_014", "date": "2027-09-11", "holiday_name": "First Onam (Uthradam)", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Onam eve"},
+    {"holiday_id": "H_2027_KL_015", "date": "2027-09-12", "holiday_name": "Thiruvonam", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Thiruvonam core Onam day"},
+    {"holiday_id": "H_2027_KL_016", "date": "2027-09-13", "holiday_name": "Third Onam (Avittom)", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Onam day 3"},
+    {"holiday_id": "H_2027_KL_017", "date": "2027-09-21", "holiday_name": "Sree Narayana Guru Samadhi Day", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Guru Samadhi"},
+    {"holiday_id": "H_2027_KL_018", "date": "2027-10-09", "holiday_name": "Mahanavami", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Puja holiday"},
+    {"holiday_id": "H_2027_KL_019", "date": "2027-10-10", "holiday_name": "Vijayadasami", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Vidyarambham"},
+    {"holiday_id": "H_2027_KL_020", "date": "2027-10-29", "holiday_name": "Deepavali", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_astronomical_calendar", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Diwali"},
+    {"holiday_id": "H_2027_KL_021", "date": "2027-12-25", "holiday_name": "Christmas", "state": "KL", "year": 2027, "is_gazetted": True, "is_national": False, "verification_status": "projected_statutory_holiday", "source_name": "Kerala GAD Holiday Framework", "source_url": "https://kerala.gov.in", "notes": "Christmas Day"},
+]
+
 HOLIDAY_EVENT_COLUMNS = [
     "holiday_id",
     "date",
@@ -352,6 +436,8 @@ def is_school_vacation_kerala(d: date) -> bool:
         return True
     if d.year == 2026 and (m == 8 and 21 <= day <= 31):
         return True
+    if d.year == 2027 and (m == 9 and 7 <= day <= 17):
+        return True
     # Christmas break
     if (m == 12 and day >= 23) or (m == 1 and day <= 2):
         return True
@@ -425,9 +511,18 @@ def is_college_vacation_tamil_nadu(d: date) -> bool:
 # ---------------------------------------------------------------------------
 # Core Feature Generator Engine
 # ---------------------------------------------------------------------------
-def build_holiday_events() -> pd.DataFrame:
-    """Build, validate, and return the official holiday events table."""
-    df = pd.DataFrame(OFFICIAL_HOLIDAY_EVENTS)
+def build_holiday_events(include_future: bool = False) -> pd.DataFrame:
+    """Build, validate, and return the official holiday events table.
+
+    Args:
+        include_future: If True, includes projected 2027 holidays.
+            If False (default), returns strictly the verified 2024-2026 historical events.
+    """
+    events = list(OFFICIAL_HOLIDAY_EVENTS)
+    if include_future:
+        events.extend(PROJECTED_2027_HOLIDAY_EVENTS)
+
+    df = pd.DataFrame(events)
     df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
 
     # Validate schema
@@ -446,23 +541,36 @@ def generate_calendar_features(
     start_date: str = SIMULATION_START_DATE,
     end_date: str = SIMULATION_END_DATE,
     holiday_events: Optional[pd.DataFrame] = None,
+    expected_days: Optional[int] = None,
+    allowed_years: Optional[List[int]] = None,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    """Generate the 1,096-day calendar features and holiday event datasets.
+    """Generate daily calendar features and holiday event datasets.
 
     Args:
         start_date: Start date string (YYYY-MM-DD), default '2024-01-01'.
         end_date: End date string (YYYY-MM-DD), default '2026-12-31'.
         holiday_events: Optional custom holiday events DataFrame.
+        expected_days: Optional expected number of days. If None, derived from date range.
+        allowed_years: Optional list of permitted calendar years.
 
     Returns:
         Tuple of (calendar_features_df, holiday_events_df).
     """
+    start_dt = pd.to_datetime(start_date)
+    end_dt = pd.to_datetime(end_date)
+    calc_expected_days = (end_dt - start_dt).days + 1
+    if expected_days is None:
+        expected_days = calc_expected_days
+
+    if allowed_years is None:
+        allowed_years = list(range(start_dt.year, end_dt.year + 1))
+
     if holiday_events is None:
-        holiday_events = build_holiday_events()
+        include_future = end_dt.year >= 2027
+        holiday_events = build_holiday_events(include_future=include_future)
 
     # Generate continuous date range
     dt_range = pd.date_range(start=start_date, end=end_date, freq="D")
-    expected_days = (pd.to_datetime(end_date) - pd.to_datetime(start_date)).days + 1
 
     if len(dt_range) != expected_days:
         raise ValueError(
@@ -588,25 +696,32 @@ def generate_calendar_features(
         })
 
     cal_df = pd.DataFrame(rows)
-    validate_calendar_features(cal_df)
+    validate_calendar_features(cal_df, expected_days=expected_days, allowed_years=allowed_years)
     return cal_df, holiday_events
 
 
-def validate_calendar_features(df: pd.DataFrame) -> None:
+def validate_calendar_features(
+    df: pd.DataFrame,
+    expected_days: int = 1096,
+    allowed_years: Optional[List[int]] = None,
+) -> None:
     """Validate calendar feature table integrity, length, and column schemas.
 
     Raises:
-        ValueError: If dates are discontinuous, rows != 1096, columns are missing,
+        ValueError: If dates are discontinuous, rows != expected_days, columns are missing,
             or values violate logical constraints.
     """
+    if allowed_years is None:
+        allowed_years = [2024, 2025, 2026]
+
     # 1. Required columns
     missing = set(CALENDAR_FEATURE_COLUMNS) - set(df.columns)
     if missing:
         raise ValueError(f"Missing required calendar columns: {sorted(missing)}")
 
-    # 2. Exactly 1,096 days
-    if len(df) != 1096:
-        raise ValueError(f"Expected exactly 1,096 dates, found {len(df)}")
+    # 2. Exactly expected_days
+    if len(df) != expected_days:
+        raise ValueError(f"Expected exactly {expected_days:,} dates, found {len(df)}")
 
     # 3. Continuous date sequence
     dates = pd.to_datetime(df["date"])
@@ -623,8 +738,8 @@ def validate_calendar_features(df: pd.DataFrame) -> None:
         raise ValueError(f"Null values detected in calendar features: {null_counts[null_counts > 0].to_dict()}")
 
     # 5. Logical constraints
-    if not df["year"].isin([2024, 2025, 2026]).all():
-        raise ValueError("Year must be within 2024-2026.")
+    if not df["year"].isin(allowed_years).all():
+        raise ValueError(f"Year must be within {allowed_years}.")
 
     if not df["month"].between(1, 12).all():
         raise ValueError("Month must be between 1 and 12.")
@@ -640,11 +755,48 @@ def validate_calendar_features(df: pd.DataFrame) -> None:
     if invalid_seasons:
         raise ValueError(f"Invalid seasons detected: {invalid_seasons}")
 
-    # National holidays must be exactly on 01-26, 08-15, 10-02
-    national_dates = set(df[df["is_national_holiday"]]["date"].str[5:])
-    expected_national_md = {"01-26", "08-15", "10-02"}
-    if national_dates != expected_national_md:
-        raise ValueError(f"National holiday month-days mismatch. Expected {expected_national_md}, got {national_dates}")
+    # National holidays must be exactly on 01-26, 08-15, 10-02 for each year in df
+    for yr in df["year"].unique():
+        yr_df = df[df["year"] == yr]
+        national_dates = set(yr_df[yr_df["is_national_holiday"]]["date"].str[5:])
+        expected_national_md = {"01-26", "08-15", "10-02"}
+        if national_dates != expected_national_md:
+            raise ValueError(f"National holiday month-days mismatch for year {yr}. Expected {expected_national_md}, got {national_dates}")
+
+
+def generate_future_calendar_features(
+    start_date: str = "2027-01-01",
+    end_date: str = "2027-12-31",
+    output_path: Optional[Path] = None,
+) -> pd.DataFrame:
+    """Generate, validate, and write the 365-day 2027 future calendar reference dataset.
+
+    Args:
+        start_date: Start date string (default '2027-01-01').
+        end_date: End date string (default '2027-12-31').
+        output_path: Destination CSV path (default data/future/2027_calendar_features.csv).
+
+    Returns:
+        Validated DataFrame containing 365 daily calendar features for 2027.
+    """
+    if output_path is None:
+        output_path = FUTURE_CALENDAR_PATH
+
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    holiday_events_2027 = build_holiday_events(include_future=True)
+    cal_2027_df, _ = generate_calendar_features(
+        start_date=start_date,
+        end_date=end_date,
+        holiday_events=holiday_events_2027,
+        expected_days=365,
+        allowed_years=[2027],
+    )
+
+    cal_2027_df.to_csv(output_path, index=False)
+    print(f"\nCreated {len(cal_2027_df)} future calendar records: {output_path.resolve()}")
+    return cal_2027_df
 
 
 def main() -> None:

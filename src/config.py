@@ -5,10 +5,12 @@ file paths, and deterministic seed definitions across the project.
 """
 
 from dataclasses import dataclass, field
+from datetime import datetime
 import os
 from pathlib import Path
 import random
 from typing import Dict, List
+from zoneinfo import ZoneInfo
 import numpy as np
 
 # ---------------------------------------------------------------------------
@@ -17,11 +19,14 @@ import numpy as np
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
+FUTURE_DATA_DIR = DATA_DIR / "future"
 GENERATED_DATA_DIR = DATA_DIR / "generated"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
 REPORTS_DIR = PROJECT_ROOT / "reports"
 DOCS_DIR = PROJECT_ROOT / "docs"
+
+FUTURE_CALENDAR_PATH = FUTURE_DATA_DIR / "2027_calendar_features.csv"
 
 # ---------------------------------------------------------------------------
 # Reproducibility Settings
@@ -46,6 +51,7 @@ def set_seed(seed: int = DEFAULT_RANDOM_SEED) -> None:
 SIMULATION_YEARS: int = 3
 SIMULATION_START_DATE: str = "2024-01-01"
 SIMULATION_END_DATE: str = "2026-12-31"  # 3 full years = 1,096 days
+OPERATIONAL_HORIZON_END_DATE: str = "2027-12-31"  # Operational forecast horizon extends through 2027
 
 # 4 departures per route per day
 DEPARTURES_PER_ROUTE_DAY: int = 4
@@ -92,6 +98,12 @@ CITY_NAME_TO_ID: Dict[str, str] = {c.city_name: c.city_id for c in TARGET_CITIES
 
 
 # ---------------------------------------------------------------------------
+# Operational Timezone
+# ---------------------------------------------------------------------------
+DEFAULT_TIMEZONE: str = os.getenv("BUSDEMAND_TIMEZONE", "Asia/Kolkata")
+
+
+# ---------------------------------------------------------------------------
 # Project Configuration Dataclass
 # ---------------------------------------------------------------------------
 @dataclass
@@ -100,10 +112,13 @@ class ProjectConfig:
     simulation_years: int = SIMULATION_YEARS
     simulation_start_date: str = SIMULATION_START_DATE
     simulation_end_date: str = SIMULATION_END_DATE
+    operational_horizon_end_date: str = OPERATIONAL_HORIZON_END_DATE
     departures_per_route_day: int = DEPARTURES_PER_ROUTE_DAY
     bus_capacity: int = DEFAULT_BUS_CAPACITY
+    timezone: str = DEFAULT_TIMEZONE
     cities: List[CityConfig] = field(default_factory=lambda: list(TARGET_CITIES))
     raw_data_dir: Path = RAW_DATA_DIR
+    future_data_dir: Path = FUTURE_DATA_DIR
     generated_data_dir: Path = GENERATED_DATA_DIR
     processed_data_dir: Path = PROCESSED_DATA_DIR
     artifacts_dir: Path = ARTIFACTS_DIR
@@ -112,3 +127,13 @@ class ProjectConfig:
 
 # Instantiate default active configuration
 active_config = ProjectConfig()
+
+
+def get_operating_timezone() -> ZoneInfo:
+    """Return the configured project operating timezone as a ZoneInfo object."""
+    return ZoneInfo(active_config.timezone)
+
+
+def get_current_server_time() -> datetime:
+    """Return the current localized server timestamp in the operating timezone."""
+    return datetime.now(get_operating_timezone())

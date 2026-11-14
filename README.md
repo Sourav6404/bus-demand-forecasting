@@ -35,7 +35,7 @@ Intercity passenger bus operations require precise demand forecasting to optimiz
 1. **High-Fidelity Synthetic Simulation:** Develop an advanced behavioural demand simulator capturing macroeconomic indices, seasonal cycles, festival surges (Diwali, Pongal, Onam), weekday/weekend splits, and fare sensitivity.
 2. **Feature Engineering Pipeline:** Extract spatio-temporal, lag, rolling statistical, weather, and calendar features tailored for corridor-level mobility.
 3. **Forecasting Model Benchmark:** Develop and benchmark machine learning models — Historical Baseline, Random Forest, and HistGradientBoosting — using chronological splits against business KPIs (MAE, RMSE, WAPE). **Stage 7 complete:** HistGradientBoosting achieves **21.10% WAPE** on held-out test data, a **19.4% improvement** over the historical baseline.
-4. **Operational API & Serving:** Expose production-ready REST endpoints for route-level and departure-level demand predictions and confidence intervals.
+4. **Operational API & Serving [STAGE 8 COMPLETE]:** Expose production-ready FastAPI REST endpoints and interactive web interface for route-level and departure-level demand predictions 24 hours prior to scheduled departure.
 
 ---
 
@@ -44,6 +44,7 @@ Intercity passenger bus operations require precise demand forecasting to optimiz
 For complete details on the behavioral demand equations, spatial interaction gravity models, and socioeconomic index formulations, see:
 - [Synthetic Data Strategy & Behavioral Assumptions](docs/synthetic_data_strategy.md)
 - [Project Configuration Module](src/config.py)
+- [Stage 7 Model Evaluation Report](reports/model_evaluation_report.md)
 
 ```
 BusDemand AI
@@ -61,9 +62,11 @@ BusDemand AI
 │   ├── HistGradientBoosting Regressor ★ WINNER (MAE: 7.331, WAPE: 21.10% test)
 │   ├── Chronological Train/Val/Test Splits (58,480 / 14,480 / 14,720 trips)
 │   └── Permutation Feature Importance & Per-Route Diagnostics
-└── Serving & Deployment
-    ├── FastAPI REST Endpoints
-    └── Batch Inference & Reporting Engine
+└── Serving & Deployment [STAGE 8 COMPLETE]
+    ├── FastAPI REST Endpoints (/health, /routes, /departure-slots, /predict)
+    ├── Feature Builder (25-feature matrix from raw reference datasets)
+    ├── Predictor Service (loads best_model_pipeline.joblib once on boot)
+    └── Interactive Web UI (HTML/CSS/JS dashboard served at /)
 ```
 
 ---
@@ -107,7 +110,7 @@ python -c "import src.config as cfg; print(f'Config OK: {cfg.SIMULATION_YEARS} y
 ```
 
 ### 5. Generate Reference & Simulation Datasets
-Generate the validated reference datasets and synthetic passenger demand:
+Generate the validated reference datasets, synthetic passenger demand, and model artifacts:
 ```bash
 # 1. Generate 8 scenario-based city profiles
 python src/data/generate_city_profiles.py
@@ -125,29 +128,94 @@ python src/data/generate_trip_demand.py
 python src/data/generate_eda_report.py
 
 # 6. Train and evaluate all Stage 7 models (Baseline, RF, HistGradientBoosting)
-#    Saves model artifacts to artifacts/ and report to reports/model_evaluation_report.md
+#    Saves best_model_pipeline.joblib and evaluation_metrics.json to artifacts/
 python src/models/train_models.py
 
-# 7. Run full automated test suite (73 tests)
+# 7. Start the FastAPI inference service and interactive web UI (Stage 8)
+uvicorn src.api.main:app --host 127.0.0.1 --port 8000 --reload
+
+# 8. Run full automated test suite (103 tests across all stages)
 python -m pytest tests/ -v
 ```
 
 ---
 
-## 5. Repository Structure
+## 5. REST Inference API & Interactive Interface (Stage 8)
+
+The FastAPI inference service loads the trained `artifacts/best_model_pipeline.joblib` artifact **once at application startup** via a lifespan manager, reconstructs the 25 required model features dynamically from reference datasets, and predicts passenger volume 24 hours prior to departure.
+
+### Starting the Server
+```bash
+uvicorn src.api.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+- **Interactive Web Interface:** `http://127.0.0.1:8000/`
+- **Swagger Interactive API Documentation:** `http://127.0.0.1:8000/docs`
+- **ReDoc API Documentation:** `http://127.0.0.1:8000/redoc`
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/health` | Service and model status, scikit-learn version, and horizon bounds |
+| `GET` | `/routes` | 20 supported directed corridors with distance, duration, and mobility scores |
+| `GET` | `/departure-slots` | 4 daily scheduled departure slots (`06:00`, `11:30`, `17:00`, `22:30`) |
+| `POST` | `/predict` | 24-hour ahead demand forecast with operational capacity status |
+| `GET` | `/` | Responsive HTML5/CSS/JavaScript single-page forecasting dashboard |
+
+### Example Prediction Request & Response
+
+#### Request (`POST /predict`):
+```bash
+curl -X POST "http://127.0.0.1:8000/predict" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "route_id": "R_BLR_COK",
+    "departure_date": "2026-12-20",
+    "departure_time": "22:30"
+  }'
+```
+
+#### Response (`HTTP 200 OK`):
+```json
+{
+  "route_id": "R_BLR_COK",
+  "origin_city": "Bengaluru",
+  "destination_city": "Kochi",
+  "departure_datetime": "2026-12-20T22:30:00",
+  "prediction_cutoff": "2026-12-19T22:30:00",
+  "predicted_passenger_demand": 49.0,
+  "bus_capacity": 45,
+  "capacity_status": "capacity_exceeded",
+  "estimated_unserved_demand": 4.0,
+  "model_name": "HistGradientBoostingRegressor"
+}
+```
+
+#### Operational Logic:
+- `prediction_cutoff`: Calculated as `departure_datetime - 24 hours`. Calendar and planned holiday features are assumed known at this cutoff.
+- `capacity_status`: `"within_capacity"` if `predicted_passenger_demand <= bus_capacity`, else `"capacity_exceeded"`.
+- `estimated_unserved_demand`: `max(0, predicted_passenger_demand - bus_capacity)`.
+
+---
+
+## 6. Repository Structure
 
 ```
 ├── docs/               <- Strategy, assumptions, and architectural documentation
-│   └── synthetic_data_strategy.md
+│   ├── synthetic_data_strategy.md
+│   └── future_forecasting_architecture.md <- Architecture: historical vs 2027 calendar separation
 ├── data/
 │   ├── raw/            <- Immutable raw datasets and base configuration profiles
 │   │   ├── city_profiles.csv       <- 8 South Indian hub profiles & mobility indices
 │   │   ├── route_profiles.csv      <- 20 directed intercity route features
-│   │   ├── calendar_features.csv   <- 1,096-day calendar matrix (2024-2026)
+│   │   ├── calendar_features.csv   <- 1,096-day calendar matrix (2024-2026, immutable)
 │   │   └── holiday_events.csv      <- 165 official and cultural holiday events
+│   ├── future/         <- Future operational calendar partition
+│   │   └── 2027_calendar_features.csv <- 365-day calendar matrix for 2027 inference
 │   ├── generated/      <- Intermediate simulation artifacts
 │   └── processed/      <- Processed modeling matrices (git-ignored)
-│       └── trip_demand.csv         <- 87,680 scheduled trip passenger demand records
+│       └── trip_demand.csv         <- 87,680 scheduled trip passenger demand records (2024-2026)
 ├── src/
 │   ├── __init__.py
 │   ├── config.py       <- Centralized project configuration & seed control
@@ -162,9 +230,13 @@ python -m pytest tests/ -v
 │   │   ├── preprocessing.py        <- ColumnTransformer pipelines & feature specs
 │   │   ├── evaluate_models.py      <- MAE, RMSE, WAPE metrics & diagnostics
 │   │   └── train_models.py         <- End-to-end training & artifact serialization
+│   ├── api/            <- Stage 8: REST inference API & interactive UI
+│   │   ├── main.py                 <- FastAPI app, exception handlers, web UI
+│   │   ├── schemas.py              <- Pydantic v2 request/response schemas
+│   │   ├── predictor.py            <- Model lifecycle, predict, capacity logic
+│   │   └── feature_builder.py      <- 25-feature row builder from reference data
 │   ├── features/       <- Feature extraction, encoders, lag transformers
 │   ├── evaluation/     <- Performance metrics, backtesting, residual diagnostics
-│   └── api/            <- REST API endpoints, schemas, request/response models
 ├── notebooks/          <- Exploratory data analysis and experimental prototypes
 │   ├── 01_trip_demand_eda.ipynb    <- Interactive trip passenger demand EDA
 │   └── 02_model_training_and_evaluation.ipynb  <- Stage 7 model training walkthrough
@@ -173,10 +245,12 @@ python -m pytest tests/ -v
 ├── reports/            <- Generated performance reports, figures, and metrics
 │   ├── trip_demand_eda.md          <- Comprehensive Stage 6 EDA summary report
 │   └── model_evaluation_report.md  <- Stage 7 model training & evaluation report
-└── tests/              <- Unit and integration test suite (73 tests)
-    ├── test_city_profiles.py
-    ├── test_route_profiles.py
-    ├── test_calendar_features.py
-    ├── test_trip_demand.py
-    └── test_model_pipeline.py      <- Stage 7: split, baseline, metrics, artifacts
+└── tests/              <- Unit and integration test suite (103 tests)
+    ├── test_city_profiles.py       <- Stage 3 tests (10 tests)
+    ├── test_route_profiles.py      <- Stage 4 tests (17 tests)
+    ├── test_calendar_features.py   <- Stage 5 tests (17 tests)
+    ├── test_trip_demand.py         <- Stage 6 tests (15 tests)
+    ├── test_model_pipeline.py      <- Stage 7 tests (14 tests)
+    ├── test_api.py                 <- Stage 8 tests (22 tests)
+    └── test_future_calendar.py     <- Future calendar & data separation tests (8 tests)
 ```
