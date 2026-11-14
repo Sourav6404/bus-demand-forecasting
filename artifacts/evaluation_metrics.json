@@ -1,0 +1,47 @@
+{
+  "train_rows": 58480,
+  "val_rows": 14480,
+  "test_rows": 14720,
+  "validation_metrics": [
+    {
+      "model": "Baseline",
+      "split": "Validation",
+      "mae": 9.687,
+      "rmse": 13.451,
+      "wape_pct": 25.89
+    },
+    {
+      "model": "RandomForest",
+      "split": "Validation",
+      "mae": 8.058,
+      "rmse": 10.64,
+      "wape_pct": 21.53
+    },
+    {
+      "model": "HistGradientBoosting",
+      "split": "Validation",
+      "mae": 7.852,
+      "rmse": 10.345,
+      "wape_pct": 20.98
+    }
+  ],
+  "test_metrics": [
+    {
+      "model": "Baseline",
+      "split": "Test",
+      "mae": 9.091,
+      "rmse": 12.143,
+      "wape_pct": 26.16
+    },
+    {
+      "model": "HistGradientBoosting",
+      "split": "Test",
+      "mae": 7.331,
+      "rmse": 9.548,
+      "wape_pct": 21.1
+    }
+  ],
+  "best_model": "HistGradientBoosting",
+  "mae_improvement_pct": 19.36,
+  "wape_improvement_pct": 19.34
+}

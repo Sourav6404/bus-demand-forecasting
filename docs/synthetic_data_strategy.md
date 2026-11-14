@@ -314,3 +314,198 @@ $$n = \frac{1}{\alpha} = 25.0, \quad p = \frac{n}{n + \mu_{ijst}} = \frac{25.0}{
 1. **Fixed Seed:** All pseudo-random sampling (NumPy RNG) is initialized with seed `42`.
 2. **Boundary Realism:** Passenger demand is constrained by physical coach capacity ($N = 45$ seats) with latent unfulfilled demand tracking (simulating waitlists/sold-out runs).
 3. **Audit Trail:** Every synthetic artifact records generation timestamp, configuration parameters, and schema checksums.
+
+
+---
+
+## 9. Stage 7 – Baseline & Machine Learning Model Development
+
+This section documents the modeling methodology, feature specification, evaluation protocol, and selection criteria applied in Stage 7. All models are trained and evaluated exclusively on the synthetic demand data generated in Stage 6. Results reflect simulation assumptions, not real-world transit telemetry.
+
+---
+
+### A. Chronological Dataset Partitioning
+
+Data is split **strictly in chronological order** — no random shuffling is applied. The three partitions are:
+
+| Partition | Date Range | Days | Trips |
+|---|---|---|---|
+| **Training** | 2024-01-01 → 2025-12-31 | 731 | **58,480** |
+| **Validation** | 2026-01-01 → 2026-06-30 | 181 | **14,480** |
+| **Held-out Test** | 2026-07-01 → 2026-12-31 | 184 | **14,720** |
+
+- **No date overlap** exists between any two partitions.
+- **Model selection is performed on validation data only.** The test set is evaluated once after the winning model is chosen.
+- All preprocessing transformers (encoders, scalers) are fitted exclusively on training data and applied to validation and test sets without re-fitting.
+
+---
+
+### B. Prediction Features
+
+The following 25 features are used for model training. All are available 24 hours before scheduled departure (the forecast cutoff). Features are derived from the route profiles, city profiles, and calendar datasets — none require knowledge of actual passenger demand.
+
+#### Categorical Features (5)
+
+| Feature | Encoding | Notes |
+|---|---|---|
+| `route_id` | OHE (RF) / Ordinal (HGB) | 20 directed routes |
+| `origin_city_id` | OHE (RF) / Ordinal (HGB) | 8 cities |
+| `destination_city_id` | OHE (RF) / Ordinal (HGB) | 8 cities |
+| `departure_slot` | OHE (RF) / Ordinal (HGB) | 4 daily slots |
+| `season` | OHE (RF) / Ordinal (HGB) | Summer / Monsoon / Post-Monsoon / Winter |
+
+#### Numerical Features (20)
+
+| Feature | Type | Notes |
+|---|---|---|
+| `distance_km` | Float | Route highway distance |
+| `journey_duration_minutes` | Float | Scheduled travel time |
+| `route_demand_multiplier` | Float | Corridor-level demand scaling |
+| `route_mobility_score` | Float | Road quality × popularity composite |
+| `departure_hour` | Integer | Scheduled hour (6 / 11 / 17 / 22) |
+| `day_of_week` | Integer | 0=Monday … 6=Sunday |
+| `is_weekend` | Binary | 1 if Saturday or Sunday |
+| `month` | Integer | 1–12 |
+| `quarter` | Integer | 1–4 |
+| `is_holiday_origin` | Binary | Public holiday at origin state |
+| `is_holiday_destination` | Binary | Public holiday at destination state |
+| `is_national_holiday` | Binary | Applies across all states |
+| `is_pre_holiday` | Binary | Day before a public holiday |
+| `is_post_holiday` | Binary | Day after a public holiday |
+| `is_long_weekend` | Binary | 3+ consecutive non-working days |
+| `is_school_vacation_origin` | Binary | School vacation at origin state |
+| `is_school_vacation_destination` | Binary | School vacation at destination state |
+| `is_college_vacation_origin` | Binary | College vacation at origin state |
+| `is_college_vacation_destination` | Binary | College vacation at destination state |
+| `bus_capacity` | Integer | Fixed coach capacity (45 seats) |
+
+> [!IMPORTANT]
+> The following columns are **explicitly excluded** from the feature matrix to prevent target leakage:
+> - `passenger_demand` — the prediction target.
+> - `capacity_exceeded` — computed from demand; known only post-departure.
+> - `estimated_unserved_demand` — computed from demand; known only post-departure.
+> - `trip_id`, `departure_date`, `departure_time` — operational metadata not predictive signals.
+
+---
+
+### C. Historical Route × Slot Baseline
+
+A reproducible heuristic baseline is implemented in `src/models/baseline.py` as `HistoricalRouteSlotBaseline`, implementing `sklearn`'s `BaseEstimator` / `RegressorMixin` interface.
+
+**Calculation:** For each `(route_id, departure_slot)` pair, the average `passenger_demand` from the **training partition only** is used as the forecast.
+
+**Fallback Hierarchy (documented):**
+
+| Priority | Condition | Prediction |
+|---|---|---|
+| 1 (Exact) | `(route_id, departure_slot)` seen in training | Route × Slot mean |
+| 2 (Route) | Route seen but slot unseen | Route-level mean |
+| 3 (Global) | Route entirely unseen | Global training mean |
+
+Baseline averages are never computed from validation or test labels.
+
+---
+
+### D. Machine Learning Models
+
+#### Random Forest Regressor
+- **Hyperparameters:** `n_estimators=80`, `max_depth=14`, `random_state=42`
+- **Preprocessing:** `ColumnTransformer` with `OneHotEncoder(handle_unknown="ignore")` for categoricals; passthrough for numericals.
+- **Pipeline:** `sklearn.pipeline.Pipeline([("preprocessor", ...), ("model", ...)])`
+
+#### HistGradientBoosting Regressor
+- **Hyperparameters:** `max_iter=100`, `max_depth=10`, `random_state=42`
+- **Preprocessing:** `ColumnTransformer` with `OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1)` for categoricals; passthrough for numericals.
+- **Categorical column indices** passed to `HistGradientBoostingRegressor` via `categorical_features=[0,1,2,3,4]`.
+
+No hyperparameter search was performed on the test set.
+
+---
+
+### E. Evaluation Metrics
+
+Three metrics are computed for all model–partition combinations:
+
+| Metric | Formula | Notes |
+|---|---|---|
+| **MAE** | $\frac{1}{n}\sum |y_i - \hat{y}_i|$ | Interpretable in passenger units |
+| **RMSE** | $\sqrt{\frac{1}{n}\sum (y_i - \hat{y}_i)^2}$ | Penalises large errors |
+| **WAPE** | $\frac{\sum |y_i - \hat{y}_i|}{\sum y_i} \times 100$ | Scale-free; zero-safe (returns 0.0 if $\sum y_i \approx 0$) |
+
+WAPE is the **primary operational metric** for model selection, as it is proportional, scale-invariant, and directly interpretable as a percentage of total demand volume.
+
+---
+
+### F. Validation & Test Results
+
+#### Validation Set (2026-H1, 14,480 trips)
+
+| Model | MAE | RMSE | WAPE (%) | Rank |
+|---|---|---|---|---|
+| **HistGradientBoosting** | **7.852** | 10.345 | **20.98%** | #1 |
+| RandomForest | 8.058 | 10.640 | 21.53% | #2 |
+| Baseline | 9.687 | 13.451 | 25.89% | #3 |
+
+**Selected model: `HistGradientBoosting`** (best validation MAE and WAPE).
+
+#### Held-Out Test Set (2026-H2, 14,720 trips)
+
+| Model | MAE | RMSE | WAPE (%) | Improvement vs Baseline |
+|---|---|---|---|---|
+| **HistGradientBoosting** | **7.331** | 9.548 | **21.10%** | **+19.34% WAPE lift** |
+| Baseline | 9.091 | 12.143 | 26.16% | — |
+
+The test WAPE (21.10%) closely tracks the validation WAPE (20.98%), confirming that the model generalises consistently to future, unseen dates without temporal overfitting.
+
+---
+
+### G. Feature Importance (HistGradientBoosting Permutation, Validation Set)
+
+Permutation importance measures the increase in validation MAE when each feature's values are randomly shuffled:
+
+| Rank | Feature | MAE Degradation |
+|---|---|---|
+| 1 | `route_id` | +4.209 |
+| 2 | `departure_slot` | +3.444 |
+| 3 | `day_of_week` | +1.296 |
+| 4 | `is_long_weekend` | +0.520 |
+| 5 | `is_post_holiday` | +0.333 |
+| 6 | `is_holiday_destination` | +0.255 |
+| 7 | `is_pre_holiday` | +0.199 |
+| 8 | `is_holiday_origin` | +0.139 |
+| 9 | `distance_km` | +0.105 |
+| 10 | `departure_hour` | +0.037 |
+
+**Interpretation Caveats:**
+- Correlated features (`route_id`, `distance_km`, `route_demand_multiplier`) may share attribution — removing one may cause another's importance to increase.
+- Importances reflect the behavioral relationships baked into the synthetic simulation, not empirical real-world transit patterns.
+
+---
+
+### H. Model Artifacts
+
+| Artifact | Path | Tracked by Git |
+|---|---|---|
+| Historical baseline | `artifacts/historical_baseline.joblib` | No (`.gitignore`) |
+| Random Forest pipeline | `artifacts/random_forest_pipeline.joblib` | No (`.gitignore`) |
+| HistGradientBoosting pipeline | `artifacts/hist_gradient_boosting_pipeline.joblib` | No (`.gitignore`) |
+| Best model pipeline | `artifacts/best_model_pipeline.joblib` | No (`.gitignore`) |
+| Evaluation metrics JSON | `artifacts/evaluation_metrics.json` | **Yes** |
+
+To regenerate all model artifacts from a clean checkout:
+```bash
+python src/data/generate_city_profiles.py
+python src/data/generate_route_profiles.py
+python src/data/generate_calendar_features.py
+python src/data/generate_trip_demand.py
+python src/models/train_models.py
+```
+
+---
+
+### I. Limitations
+
+1. **Synthetic data only.** All results reflect the behavioral assumptions embedded in the simulation pipeline. Performance cannot be extrapolated to real commercial transit operations without retraining on real ticketing telemetry.
+2. **Fixed hyperparameters.** Models use a single, sensible configuration without cross-validated tuning. WAPE could likely be reduced further with proper hyperparameter search on validation data.
+3. **No lag/rolling features.** This stage uses only contemporaneous features available 24 hours before departure. Demand lag features (e.g. same-route demand 7 and 14 days prior) may substantially improve accuracy.
+4. **Single random seed.** Reproducibility is guaranteed, but model variance across seeds is not characterised.

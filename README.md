@@ -34,7 +34,7 @@ Intercity passenger bus operations require precise demand forecasting to optimiz
 
 1. **High-Fidelity Synthetic Simulation:** Develop an advanced behavioural demand simulator capturing macroeconomic indices, seasonal cycles, festival surges (Diwali, Pongal, Onam), weekday/weekend splits, and fare sensitivity.
 2. **Feature Engineering Pipeline:** Extract spatio-temporal, lag, rolling statistical, weather, and calendar features tailored for corridor-level mobility.
-3. **Forecasting Model Benchmark:** Evaluate and benchmark time-series and gradient boosting architectures (LightGBM, XGBoost, baseline models) against business KPIs (MAE, RMSE, WAPE).
+3. **Forecasting Model Benchmark:** Develop and benchmark machine learning models — Historical Baseline, Random Forest, and HistGradientBoosting — using chronological splits against business KPIs (MAE, RMSE, WAPE). **Stage 7 complete:** HistGradientBoosting achieves **21.10% WAPE** on held-out test data, a **19.4% improvement** over the historical baseline.
 4. **Operational API & Serving:** Expose production-ready REST endpoints for route-level and departure-level demand predictions and confidence intervals.
 
 ---
@@ -55,11 +55,12 @@ BusDemand AI
 │   ├── Temporal & Calendar Features (Diwali, Pongal, Onam, Long Weekends)
 │   ├── Origin-Destination Spatial Embeddings
 │   └── Rolling Demand Lags & Volatility
-├── Predictive Modeling & Evaluation
-│   ├── Baseline Time-Series Models
-│   ├── Gradient Boosted Trees (LightGBM / XGBoost)
-│   ├── Cross-Validation (Corridor & Time-split CV)
-│   └── Interpretability (SHAP, Feature Attribution)
+├── Predictive Modeling & Evaluation [STAGE 7 COMPLETE]
+│   ├── Historical Route × Slot Baseline (hierarchical fallback)
+│   ├── Random Forest Regressor (MAE: 8.058, WAPE: 21.53% val)
+│   ├── HistGradientBoosting Regressor ★ WINNER (MAE: 7.331, WAPE: 21.10% test)
+│   ├── Chronological Train/Val/Test Splits (58,480 / 14,480 / 14,720 trips)
+│   └── Permutation Feature Importance & Per-Route Diagnostics
 └── Serving & Deployment
     ├── FastAPI REST Endpoints
     └── Batch Inference & Reporting Engine
@@ -123,8 +124,12 @@ python src/data/generate_trip_demand.py
 # 5. Generate EDA report and Jupyter notebook
 python src/data/generate_eda_report.py
 
-# 6. Run full automated test suite (59 tests)
-pytest tests/ -v
+# 6. Train and evaluate all Stage 7 models (Baseline, RF, HistGradientBoosting)
+#    Saves model artifacts to artifacts/ and report to reports/model_evaluation_report.md
+python src/models/train_models.py
+
+# 7. Run full automated test suite (73 tests)
+python -m pytest tests/ -v
 ```
 
 ---
@@ -141,7 +146,7 @@ pytest tests/ -v
 │   │   ├── calendar_features.csv   <- 1,096-day calendar matrix (2024-2026)
 │   │   └── holiday_events.csv      <- 165 official and cultural holiday events
 │   ├── generated/      <- Intermediate simulation artifacts
-│   └── processed/      <- Processed modeling matrices
+│   └── processed/      <- Processed modeling matrices (git-ignored)
 │       └── trip_demand.csv         <- 87,680 scheduled trip passenger demand records
 ├── src/
 │   ├── __init__.py
@@ -152,18 +157,26 @@ pytest tests/ -v
 │   │   ├── generate_calendar_features.py
 │   │   ├── generate_trip_demand.py
 │   │   └── generate_eda_report.py
+│   ├── models/         <- Stage 7: Model training, preprocessing, evaluation
+│   │   ├── baseline.py             <- HistoricalRouteSlotBaseline with fallback
+│   │   ├── preprocessing.py        <- ColumnTransformer pipelines & feature specs
+│   │   ├── evaluate_models.py      <- MAE, RMSE, WAPE metrics & diagnostics
+│   │   └── train_models.py         <- End-to-end training & artifact serialization
 │   ├── features/       <- Feature extraction, encoders, lag transformers
-│   ├── models/         <- Model definitions, training scripts, tuning routines
 │   ├── evaluation/     <- Performance metrics, backtesting, residual diagnostics
 │   └── api/            <- REST API endpoints, schemas, request/response models
 ├── notebooks/          <- Exploratory data analysis and experimental prototypes
-│   └── 01_trip_demand_eda.ipynb    <- Interactive trip passenger demand EDA
-├── artifacts/          <- Serialized models, encoders, and evaluation metadata
+│   ├── 01_trip_demand_eda.ipynb    <- Interactive trip passenger demand EDA
+│   └── 02_model_training_and_evaluation.ipynb  <- Stage 7 model training walkthrough
+├── artifacts/          <- Serialized models & evaluation metadata (joblib git-ignored)
+│   └── evaluation_metrics.json     <- Model comparison metrics (tracked)
 ├── reports/            <- Generated performance reports, figures, and metrics
-│   └── trip_demand_eda.md          <- Comprehensive Stage 6 EDA summary report
-└── tests/              <- Unit and integration test suite (59 tests)
+│   ├── trip_demand_eda.md          <- Comprehensive Stage 6 EDA summary report
+│   └── model_evaluation_report.md  <- Stage 7 model training & evaluation report
+└── tests/              <- Unit and integration test suite (73 tests)
     ├── test_city_profiles.py
     ├── test_route_profiles.py
     ├── test_calendar_features.py
-    └── test_trip_demand.py
+    ├── test_trip_demand.py
+    └── test_model_pipeline.py      <- Stage 7: split, baseline, metrics, artifacts
 ```
