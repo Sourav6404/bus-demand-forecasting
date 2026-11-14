@@ -1,0 +1,166 @@
+holiday_id,date,holiday_name,state,year,is_gazetted,is_national,verification_status,source_name,source_url,notes
+H_2024_TN_001,2024-01-01,New Year's Day,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Public holiday under NI Act
+H_2024_KL_001,2024-01-02,Mannam Jayanthi,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Social reformer Mannathu Padmanabhan Birthday
+H_2024_KA_001,2024-01-15,Makara Sankranti,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Harvest festival
+H_2024_TN_002,2024-01-15,Pongal,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Harvest festival peak mobility
+H_2024_TN_003,2024-01-16,Thiruvalluvar Day,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Pongal holiday sequence
+H_2024_TN_004,2024-01-17,Uzhavar Thirunal,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Farmers festival holiday
+H_2024_TN_005,2024-01-25,Thai Poosam,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Religious observance holiday
+H_2024_NAT_001,2024-01-26,Republic Day,ALL,2024,True,True,verified_official_gazette,"Ministry of Personnel, Govt of India",https://dopt.gov.in,National holiday celebrated across all states
+H_2024_KA_002,2024-03-08,Maha Shivaratri,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Religious holiday
+H_2024_KL_002,2024-03-08,Sivarathri,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Aluva Sivarathri festival
+H_2024_KL_003,2024-03-28,Maundy Thursday,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Holy Thursday
+H_2024_KA_003,2024-03-29,Good Friday,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Christian observance
+H_2024_KL_004,2024-03-29,Good Friday,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Good Friday
+H_2024_TN_006,2024-03-29,Good Friday,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Christian observance
+H_2024_KA_004,2024-04-09,Ugadi Festival,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Kannada New Year
+H_2024_TN_007,2024-04-09,Telugu New Year's Day,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Ugadi celebration
+H_2024_KL_005,2024-04-10,Id-ul-Fitr (Ramzan),KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Observed on moon sighting
+H_2024_KA_005,2024-04-11,Khutub-E-Ramzan,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Id-ul-Fitr
+H_2024_TN_008,2024-04-11,Ramzan (Eid-ul-Fitr),TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Subject to moon sighting
+H_2024_KL_COL_003,2024-04-14,Vishu (Malayalam New Year) — Cultural Observance,KL,2024,False,False,cultural_observance_assumption,Kerala cultural calendar — synthetic assumption,https://kerala.gov.in,Vishu not separately gazetted in KL 2024; added as cultural_observance_assumption for demand modelling; profile_type=synthetic_scenario_assumption
+H_2024_KA_006,2024-05-01,May Day,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Labour Day
+H_2024_KL_006,2024-05-01,May Day,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Workers Day
+H_2024_TN_009,2024-05-01,May Day,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,International Labour Day
+H_2024_KA_007,2024-05-10,Basava Jayanthi / Akshaya Tritiya,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Philosopher Basavanna Birth Anniversary
+H_2024_KA_008,2024-06-17,Bakrid,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Id-ul-Adha
+H_2024_KL_007,2024-06-17,Bakrid (Id-ul-Adha),KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Sacrifice feast
+H_2024_TN_010,2024-06-17,Bakrid (Eid al-Adha),TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Islamic calendar observance
+H_2024_KL_008,2024-07-16,Muharram,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Islamic New Year day
+H_2024_KA_009,2024-07-17,Last Day of Moharram,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Ashura observance
+H_2024_TN_011,2024-07-17,Muharram,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Islamic New Year
+H_2024_KL_009,2024-08-03,Karkkadaka Vaavu,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Ancestral ritual day
+H_2024_NAT_002,2024-08-15,Independence Day,ALL,2024,True,True,verified_official_gazette,"Ministry of Personnel, Govt of India",https://dopt.gov.in,National holiday celebrated across all states
+H_2024_KL_010,2024-08-20,Sree Narayana Guru Jayanthi,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,SNDP Guru Jayanthi
+H_2024_TN_012,2024-08-26,Krishna Jayanthi,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Gokulashtami
+H_2024_KA_010,2024-09-07,Varasiddhi Vinayaka Vrata,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Ganesh Chaturthi
+H_2024_TN_013,2024-09-07,Vinayakar Chathurthi,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Ganesh Chaturthi
+H_2024_KL_COL_001,2024-09-14,Uthradam (Second Onam) — Cultural Observance,KL,2024,False,False,cultural_observance_assumption,Kerala tourism/cultural calendar — synthetic assumption,https://kerala.gov.in,Cultural observance only; not a gazetted public holiday; synthetic scenario assumption for demand modelling
+H_2024_KL_014,2024-09-15,Thiruvonam (Onam),KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Main Onam day; Thiruvonam nakshatra in Chingam 2024
+H_2024_KA_011,2024-09-16,Eid-Milad,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Milad-un-Nabi
+H_2024_KL_011,2024-09-16,Milad-i-Sherif,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Nabi Dinam
+H_2024_KL_COL_002,2024-09-16,Avittom (Third Onam) — Cultural Observance,KL,2024,False,False,cultural_observance_assumption,Kerala tourism/cultural calendar — synthetic assumption,https://kerala.gov.in,Cultural observance only; not a gazetted public holiday; synthetic scenario assumption for demand modelling
+H_2024_TN_014,2024-09-16,Milad-un-Nabi,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Prophet Muhammad's Birthday
+H_2024_NAT_003,2024-10-02,Mahatma Gandhi Jayanti,ALL,2024,True,True,verified_official_gazette,"Ministry of Personnel, Govt of India",https://dopt.gov.in,National holiday celebrated across all states
+H_2024_KA_012,2024-10-11,Mahanavami / Ayudha Pooja,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Dasara festival peak
+H_2024_TN_015,2024-10-11,Ayutha Pooja,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Navaratri / Dussehra sequence
+H_2024_KA_013,2024-10-17,Maharshi Valmiki Jayanthi,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Sage Valmiki Birthday
+H_2024_KA_014,2024-10-31,Naraka Chaturdashi,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Diwali day 1
+H_2024_KL_012,2024-10-31,Deepavali,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Diwali
+H_2024_TN_016,2024-10-31,Deepavali,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Festival of Lights
+H_2024_KA_015,2024-11-01,Kannada Rajyotsava,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Karnataka State Formation Day
+H_2024_KA_016,2024-11-02,Balipadyami / Deepavali,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Diwali day 2
+H_2024_KA_017,2024-11-18,Kanakadasa Jayanthi,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Saint Kanakadasa Birthday
+H_2024_KA_018,2024-12-25,Christmas,KA,2024,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2023,https://dpar.karnataka.gov.in,Christmas Day
+H_2024_KL_013,2024-12-25,Christmas,KL,2024,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.24/2023/GAD,https://kerala.gov.in,Christmas Day
+H_2024_TN_017,2024-12-25,Christmas,TN,2024,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.692,https://www.tn.gov.in,Christmas Day
+H_2025_KL_001,2025-01-02,Mannam Jayanthi,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Mannam Jayanthi
+H_2025_KA_001,2025-01-14,Makara Sankranti,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Harvest festival
+H_2025_TN_001,2025-01-14,Pongal,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Thai Pongal harvest festival
+H_2025_TN_002,2025-01-15,Thiruvalluvar Day,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Pongal festival chain
+H_2025_TN_003,2025-01-16,Uzhavar Thirunal,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Farmers festival
+H_2025_NAT_001,2025-01-26,Republic Day,ALL,2025,True,True,verified_official_gazette,"Ministry of Personnel, Govt of India",https://dopt.gov.in,National holiday
+H_2025_TN_004,2025-02-11,Thai Poosam,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Murugan temple festivals
+H_2025_KA_002,2025-02-26,Maha Shivaratri,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Shivaratri
+H_2025_KL_002,2025-02-26,Maha Sivarathri,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Sivarathri
+H_2025_KA_003,2025-03-31,Khutub-E-Ramzan,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Id-ul-Fitr
+H_2025_KL_003,2025-03-31,Id-ul-Fitr (Ramzan),KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Subject to moon sighting
+H_2025_TN_005,2025-03-31,Ramzan (Idul Fitr),TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Subject to moon sighting
+H_2025_KA_004,2025-04-10,Mahaveera Jayanthi,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Jain observance
+H_2025_TN_006,2025-04-10,Mahaveer Jayanthi,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Jain observance
+H_2025_KA_005,2025-04-14,Dr. B.R. Ambedkar Jayanthi,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Ambedkar Birthday
+H_2025_KL_004,2025-04-14,Vishu / Dr. B.R. Ambedkar Jayanthi,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Malayalam New Year harvest day
+H_2025_TN_007,2025-04-14,Tamil New Year / Dr Ambedkar Birthday,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Puthandu celebration
+H_2025_KL_005,2025-04-17,Maundy Thursday,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Holy Thursday
+H_2025_KA_006,2025-04-18,Good Friday,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Christian observance
+H_2025_KL_006,2025-04-18,Good Friday,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Good Friday
+H_2025_TN_008,2025-04-18,Good Friday,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Christian observance
+H_2025_KA_007,2025-04-30,Basava Jayanthi / Akshaya Tritiya,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Basavanna Birthday
+H_2025_KA_008,2025-05-01,May Day,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Labour Day
+H_2025_KL_007,2025-05-01,May Day,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,May Day
+H_2025_TN_009,2025-05-01,May Day,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Labour Day
+H_2025_KL_008,2025-06-06,Id-ul-Ad'ha (Bakrid),KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Bakrid
+H_2025_KA_009,2025-06-07,Bakrid (Id-ul-Zuha),KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Sacrifice feast
+H_2025_TN_010,2025-06-07,Bakrid (Idul Azha),TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Islamic feast
+H_2025_KL_009,2025-07-24,Karkadaka Vavu,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Vavu Bali
+H_2025_NAT_002,2025-08-15,Independence Day,ALL,2025,True,True,verified_official_gazette,"Ministry of Personnel, Govt of India",https://dopt.gov.in,National holiday
+H_2025_TN_011,2025-08-16,Krishna Jayanthi,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Janmashtami
+H_2025_KA_010,2025-08-27,Varasiddhi Vinayaka Vrata,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Ganesh Chaturthi
+H_2025_KL_010,2025-08-28,Ayyankali Jayanthi,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Social leader Ayyankali Birthday
+H_2025_TN_012,2025-08-28,Vinayakar Chathurthi,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Ganesh Chaturthi
+H_2025_KL_011,2025-09-04,First Onam,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Onam celebration day 1
+H_2025_KA_011,2025-09-05,Eid-Milad,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Prophet Birthday
+H_2025_KL_012,2025-09-05,Thiruvonam / Milad-i-Sherif,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Main Onam day
+H_2025_TN_013,2025-09-05,Milad-un-Nabi,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Prophet Muhammad Birthday
+H_2025_KL_013,2025-09-06,Third Onam,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Avittom day
+H_2025_KA_012,2025-10-01,Mahanavami / Ayudha Pooja,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Dasara festival
+H_2025_KL_014,2025-10-01,Mahanavami,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Puja holiday
+H_2025_TN_014,2025-10-01,Ayudha Pooja,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Navaratri holiday
+H_2025_NAT_003,2025-10-02,Mahatma Gandhi Jayanti,ALL,2025,True,True,verified_official_gazette,"Ministry of Personnel, Govt of India",https://dopt.gov.in,National holiday
+H_2025_KL_015,2025-10-02,Vijayadasami,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Vidyarambham day
+H_2025_TN_015,2025-10-02,Vijaya Dasami,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Conjoined with Gandhi Jayanti in TN
+H_2025_KA_013,2025-10-07,Maharshi Valmiki Jayanthi,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Valmiki Birthday
+H_2025_KA_014,2025-10-20,Naraka Chaturdashi,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Diwali day 1
+H_2025_KL_016,2025-10-20,Deepavali,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Diwali
+H_2025_TN_016,2025-10-20,Deepavali,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Festival of Lights
+H_2025_KA_015,2025-10-22,Balipadyami / Deepavali,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Diwali day 2
+H_2025_KA_016,2025-11-01,Kannada Rajyotsava,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Karnataka Formation Day
+H_2025_KA_017,2025-12-25,Christmas,KA,2025,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2024,https://dpar.karnataka.gov.in,Christmas Day
+H_2025_KL_017,2025-12-25,Christmas,KL,2025,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.34/2024/GAD,https://kerala.gov.in,Christmas Day
+H_2025_TN_017,2025-12-25,Christmas Day,TN,2025,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.792,https://www.tn.gov.in,Christmas
+H_2026_TN_001,2026-01-01,New Year's Day,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Public holiday under NI Act
+H_2026_KL_001,2026-01-02,Mannam Jayanthi,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Mannam Jayanthi
+H_2026_KA_001,2026-01-15,Makara Sankranti,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Uttarayana Punyakala
+H_2026_TN_002,2026-01-15,Pongal,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Thai Pongal
+H_2026_TN_003,2026-01-16,Thiruvalluvar Day,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Pongal holiday sequence
+H_2026_TN_004,2026-01-17,Uzhavar Thirunal,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Farmers festival
+H_2026_NAT_001,2026-01-26,Republic Day,ALL,2026,True,True,verified_official_gazette,"Ministry of Personnel, Govt of India",https://dopt.gov.in,National holiday
+H_2026_KA_002,2026-03-19,Ugadi Festival,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Kannada New Year
+H_2026_TN_005,2026-03-19,Telugu New Year's Day,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Ugadi celebration
+H_2026_KL_002,2026-03-20,Id-ul-Fitr (Ramzan),KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Subject to moon sighting
+H_2026_KA_003,2026-03-21,Khutub-E-Ramzan,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Id-ul-Fitr
+H_2026_TN_006,2026-03-21,Ramzan (Idul Fitr),TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Subject to moon sighting
+H_2026_KA_004,2026-03-31,Mahaveera Jayanthi,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Jain observance
+H_2026_TN_007,2026-03-31,Mahaveer Jayanthi,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Jain festival
+H_2026_KL_003,2026-04-02,Maundy Thursday,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Holy Thursday
+H_2026_KA_005,2026-04-03,Good Friday,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Christian observance
+H_2026_KL_004,2026-04-03,Good Friday,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Good Friday
+H_2026_TN_008,2026-04-03,Good Friday,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Good Friday
+H_2026_KA_006,2026-04-14,Dr. B.R. Ambedkar Jayanthi,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Ambedkar Birthday
+H_2026_KL_005,2026-04-14,Dr. B.R. Ambedkar Jayanthi,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Ambedkar Birthday
+H_2026_TN_009,2026-04-14,Tamil New Year / Dr Ambedkar Birthday,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Tamil New Year Day
+H_2026_KL_006,2026-04-15,Vishu,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Malayalam New Year harvest day
+H_2026_KA_007,2026-04-20,Basava Jayanthi / Akshaya Tritiya,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Basavanna Birthday
+H_2026_KA_008,2026-05-01,May Day,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Labour Day
+H_2026_KL_007,2026-05-01,May Day,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,May Day
+H_2026_TN_010,2026-05-01,May Day,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Labour Day
+H_2026_KL_008,2026-05-27,Id-ul-Ad'ha (Bakrid),KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Bakrid feast
+H_2026_KA_009,2026-05-28,Bakrid (Eid al-Adha),KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Id-ul-Adha
+H_2026_TN_011,2026-05-28,Bakrid (Eid al-Adha),TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Islamic feast day
+H_2026_KL_009,2026-06-25,Muharram,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Muharram
+H_2026_KA_010,2026-06-26,Last Day of Moharram,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Ashura day
+H_2026_TN_012,2026-06-26,Muharram,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Ashura observance
+H_2026_NAT_002,2026-08-15,Independence Day,ALL,2026,True,True,verified_official_gazette,"Ministry of Personnel, Govt of India",https://dopt.gov.in,National holiday
+H_2026_KL_010,2026-08-25,First Onam / Milad-i-Sherif,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Onam day 1
+H_2026_KA_011,2026-08-26,Eid-Milad,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Milad-un-Nabi
+H_2026_KL_011,2026-08-26,Thiruvonam,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Thiruvonam core day
+H_2026_TN_013,2026-08-26,Milad-un-Nabi,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Prophet Muhammad Birthday
+H_2026_KL_COL_001,2026-08-27,Avittom (Third Onam) — Cultural Observance,KL,2026,False,False,cultural_observance_assumption,Kerala tourism/cultural calendar — synthetic assumption,https://kerala.gov.in,Cultural observance only; not a gazetted public holiday; synthetic scenario assumption for demand modelling
+H_2026_KL_012,2026-08-28,Sree Narayana Guru Jayanthi / Ayyankali Jayanthi,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Guru Jayanthi
+H_2026_KL_013,2026-09-04,Sreekrishna Jayanthi,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Janmashtami
+H_2026_TN_014,2026-09-04,Krishna Jayanthi,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Janmashtami
+H_2026_KA_012,2026-09-14,Varasiddhi Vinayaka Vrata,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Ganesh Chaturthi
+H_2026_TN_015,2026-09-14,Vinayagar Chathurthi,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Ganesh Chaturthi
+H_2026_KL_014,2026-09-20,Sree Narayana Guru Samadhi Day,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Guru Samadhi
+H_2026_NAT_003,2026-10-02,Mahatma Gandhi Jayanti,ALL,2026,True,True,verified_official_gazette,"Ministry of Personnel, Govt of India",https://dopt.gov.in,National holiday
+H_2026_KL_015,2026-10-19,Mahanavami,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Puja holiday
+H_2026_TN_016,2026-10-19,Ayudha Pooja,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Navaratri holiday
+H_2026_KA_013,2026-10-20,Mahanavami / Ayudhapooja,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Dasara festival
+H_2026_KL_016,2026-10-20,Vijayadasami,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Vidyarambham
+H_2026_TN_017,2026-10-20,Vijaya Dashami,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Dussehra holiday
+H_2026_KA_014,2026-10-21,Vijayadasami,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Dussehra Vijayadashami
+H_2026_KA_015,2026-11-10,Balipadyami / Deepavali,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Deepavali festival
+H_2026_KA_016,2026-11-27,Kanakadasa Jayanthi,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Kanakadasa Birthday
+H_2026_KA_017,2026-12-25,Christmas,KA,2026,True,False,verified_official_gazette,Govt of Karnataka DPAR 16 HHL 2025,https://dpar.karnataka.gov.in,Christmas Day
+H_2026_KL_017,2026-12-25,Christmas,KL,2026,True,False,verified_official_gazette,Govt of Kerala G.O.(P) No.14/2025/GAD,https://kerala.gov.in,Christmas Day
+H_2026_TN_018,2026-12-25,Christmas Day,TN,2026,True,False,verified_official_gazette,Govt of Tamil Nadu G.O.(Ms.) No.708,https://www.tn.gov.in,Christmas

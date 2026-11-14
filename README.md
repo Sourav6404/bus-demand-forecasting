@@ -105,8 +105,8 @@ All simulation components reference a centralized deterministic seed (`RANDOM_SE
 python -c "import src.config as cfg; print(f'Config OK: {cfg.SIMULATION_YEARS} years, {len(cfg.TARGET_CITIES)} cities, seed={cfg.DEFAULT_RANDOM_SEED}')"
 ```
 
-### 5. Generate City and Route Profiles
-Generate the validated base datasets:
+### 5. Generate Base Reference Datasets
+Generate the validated reference datasets:
 ```bash
 # 1. Generate 8 scenario-based city profiles
 python src/data/generate_city_profiles.py
@@ -114,7 +114,10 @@ python src/data/generate_city_profiles.py
 # 2. Generate 20 directed intercity route profiles
 python src/data/generate_route_profiles.py
 
-# 3. Run full automated test suite
+# 3. Generate 3-year calendar features & official holiday registry (1,096 days)
+python src/data/generate_calendar_features.py
+
+# 4. Run full automated test suite (41 tests)
 pytest tests/ -v
 ```
 
@@ -127,7 +130,11 @@ pytest tests/ -v
 │   └── synthetic_data_strategy.md
 ├── data/
 │   ├── raw/            <- Immutable raw datasets and base configuration profiles
-│   ├── generated/      <- Synthetic simulation outputs (corridor demand, routes)
+│   │   ├── city_profiles.csv       <- 8 South Indian hub profiles & mobility indices
+│   │   ├── route_profiles.csv      <- 20 directed intercity route features
+│   │   ├── calendar_features.csv   <- 1,096-day calendar matrix (2024-2026)
+│   │   └── holiday_events.csv      <- 160 official gazetted state holiday events
+│   ├── generated/      <- Synthetic simulation outputs (corridor demand, departures)
 │   └── processed/      <- Cleaned, feature-engineered matrices ready for modeling
 ├── src/
 │   ├── __init__.py

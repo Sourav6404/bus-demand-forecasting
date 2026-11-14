@@ -159,7 +159,54 @@ South Indian intercity travel experiences distinct surge periods:
 
 ---
 
-## 5. Reproducibility & Validation Principles
+## 6. Calendar, Holiday & Seasonal Feature Architecture
+
+Stage 5 establishes a reference temporal framework spanning the complete 3-year simulation horizon (**1,096 calendar dates: 2024-01-01 to 2026-12-31**). It generates two foundational datasets:
+1. `data/raw/calendar_features.csv`: Daily calendar matrix with temporal, seasonal, holiday, and vacation flags.
+2. `data/raw/holiday_events.csv`: Audit registry of 160 official public holiday events with state jurisdiction, gazette citation, source URL, and verification status.
+
+### A. Official Holiday Research & Gazette Grounding
+Holidays are strictly grounded in official state government notifications across the three network states:
+- **Karnataka (KA):** Department of Personnel and Administrative Reforms (DPAR)
+  - 2024: Notification No. DPAR 16 HHL 2023, dated 28.11.2023
+  - 2025: Notification No. DPAR 16 HHL 2024, dated 21.11.2024
+  - 2026: Notification No. DPAR 16 HHL 2025, dated 17.11.2025
+- **Kerala (KL):** General Administration (Co-ordination) Department (GAD)
+  - 2024: G.O. (P) No. 24/2023/GAD, dated 04.10.2023
+  - 2025: G.O. (P) No. 34/2024/GAD & No. 35/2024/GAD, dated 14.10.2024
+  - 2026: G.O. (P) No. 14/2025/GAD & No. 15/2025/GAD, dated 31.10.2025
+- **Tamil Nadu (TN):** Public (Miscellaneous) Department
+  - 2024: G.O. (Ms.) No. 692, dated 09.11.2023
+  - 2025: G.O. (Ms.) No. 792, dated 22.11.2024
+  - 2026: G.O. (Ms.) No. 708, dated 11.11.2025
+- **National (ALL):** Ministry of Personnel, Public Grievances and Pensions (DoPT)
+  - Republic Day (Jan 26), Independence Day (Aug 15), Mahatma Gandhi Jayanti (Oct 2)
+
+*Rule on Islamic Observances:* Holidays subject to the visibility of the moon (Eid-ul-Fitr, Bakrid, Muharram, Milad-un-Nabi) preserve documented official notes reflecting lunar sighting conditions.
+
+### B. Route-Calendar State Intersection
+In the route network, each route $i \to j$ spans an origin state and a destination state:
+- **Intrastate Corridors:** (e.g. `BLR` $\leftrightarrow$ `MYS` in KA, `MAA` $\leftrightarrow$ `CBE` in TN, `COK` $\leftrightarrow$ `CCJ` in KL) synchronize directly with their respective state holiday flag (`is_holiday_ka`, `is_holiday_tn`, or `is_holiday_kl`).
+- **Interstate Corridors:** (e.g. `BLR` $\leftrightarrow$ `COK` connecting KA and KL, or `BLR` $\leftrightarrow$ `MAA` connecting KA and TN) observe both state calendars:
+  - An origin state holiday stimulates early outbound departures (`is_pre_holiday`).
+  - A destination state festival (such as Onam in Kerala or Pongal in Tamil Nadu) draws massive inbound passenger traffic originating from employment centers in Karnataka.
+  - Conjoined long weekends (`is_long_weekend`) maximize intercity travel demand across state borders.
+
+### C. Seasonal & Vacation Assumptions
+- **Meteorological Seasons (IMD Standard):**
+  - **Winter:** January – February
+  - **Summer (Pre-Monsoon):** March – May
+  - **Monsoon (South-West Monsoon):** June – September
+  - **Post-Monsoon (North-East Monsoon):** October – December
+- **Vacation Periods (Clearly Labeled Prototype Assumptions):**
+  - **Karnataka Schools (`is_school_vacation_ka`):** Summer break (Apr 11 – May 28); Dasara break (Oct 1 – Oct 14).
+  - **Kerala Schools (`is_school_vacation_kl`):** Summer vacation (Apr 1 – May 31); Onam holidays (~10 days late Aug / early Sep); Christmas break (Dec 23 – Jan 2).
+  - **Tamil Nadu Schools (`is_school_vacation_tn`):** Summer break (Apr 21 – Jun 5); Pongal holidays (Jan 13 – Jan 18).
+  - **Higher Education (`is_college_vacation`):** Summer semester recess (May 15 – Jul 10); Winter inter-semester break (Dec 22 – Jan 3).
+
+---
+
+## 7. Reproducibility & Validation Principles
 
 1. **Fixed Seed:** All pseudo-random sampling (NumPy RNG) is initialized with seed `42`.
 2. **Boundary Realism:** Passenger demand is constrained by physical coach capacity ($N = 45$ seats) with latent unfulfilled demand tracking (simulating waitlists/sold-out runs).
