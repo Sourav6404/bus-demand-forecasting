@@ -21,11 +21,11 @@ Intercity passenger bus operations require precise demand forecasting to optimiz
   - **Bengaluru (BLR)** – Karnataka (Tier 1)
   - **Mysuru (MYS)** – Karnataka (Tier 2)
   - **Chennai (MAA)** – Tamil Nadu (Tier 1)
-  - **Coimbatore (CJB)** – Tamil Nadu (Tier 2)
+  - **Coimbatore (CBE)** – Tamil Nadu (Tier 2)
   - **Kochi (COK)** – Kerala (Tier 2)
   - **Kozhikode (CCJ)** – Kerala (Tier 2)
   - **Thrissur (TCR)** – Kerala (Tier 2)
-  - **Thiruvananthapuram (TRV)** – Kerala (Tier 2)
+  - **Thiruvananthapuram (TVM)** – Kerala (Tier 2)
 
 ---
 

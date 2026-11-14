@@ -1,9 +1,9 @@
-city_id,city_name,state,tier,population,latitude,longitude,urban_scale_score,employment_score,education_score,tourism_score,economic_activity_score,migration_score,demand_generation_index,demand_attraction_index,city_mobility_index
-BLR,Bengaluru,Karnataka,1,13600000,12.9716,77.5946,9.6,9.8,9.2,6.8,9.7,9.5,9.61,8.99,9.77
-MAA,Chennai,Tamil Nadu,1,11500000,13.0827,80.2707,9.4,9.3,9.1,7.5,9.3,8.7,9.2,8.88,9.49
-CCJ,Kozhikode,Kerala,2,2050000,11.2588,75.7804,6.8,6.7,8.1,7.6,7.1,6.6,6.93,7.26,7.09
-CJB,Coimbatore,Tamil Nadu,2,2900000,11.0168,76.9558,7.3,8.2,8.5,7.0,7.9,6.9,7.68,7.83,7.75
-COK,Kochi,Kerala,2,2150000,9.9312,76.2673,7.1,7.6,7.8,9.1,8.0,7.4,7.52,8.02,7.77
-MYS,Mysuru,Karnataka,2,1320000,12.2958,76.6394,6.2,6.5,7.4,9.3,6.4,5.8,6.36,7.22,6.79
-TCR,Thrissur,Kerala,2,1050000,10.5276,76.2144,5.9,6.2,7.5,8.8,6.7,5.9,6.29,7.1,6.7
-TRV,Thiruvananthapuram,Kerala,2,1720000,8.5241,76.9366,6.9,7.4,8.3,8.4,7.3,6.7,7.2,7.71,7.46
+city_id,city,state,urban_scale_score,employment_score,education_score,tourism_score,economic_activity_score,migration_score,profile_note,profile_type,profile_period,demand_generation_index,demand_attraction_index,city_mobility_index
+BLR,Bengaluru,Karnataka,0.98,1.0,0.95,0.55,1.0,0.95,Large employment and education hub; scenario assumption,synthetic_scenario_assumption,scenario_2026,0.9530000000000001,0.8755,0.91425
+MYS,Mysuru,Karnataka,0.55,0.5,0.65,0.9,0.55,0.4,Tourism and education influence; scenario assumption,synthetic_scenario_assumption,scenario_2026,0.5375,0.6225,0.5800000000000001
+COK,Kochi,Kerala,0.78,0.78,0.72,0.92,0.85,0.72,Commercial and tourism hub; scenario assumption,synthetic_scenario_assumption,scenario_2026,0.7705,0.8205,0.7955
+CCJ,Kozhikode,Kerala,0.62,0.62,0.72,0.65,0.62,0.78,Education and migration influence; scenario assumption,synthetic_scenario_assumption,scenario_2026,0.6815,0.6535,0.6675
+TCR,Thrissur,Kerala,0.58,0.58,0.68,0.62,0.68,0.6,Regional commercial and education influence; scenario assumption,synthetic_scenario_assumption,scenario_2026,0.622,0.627,0.6245
+TVM,Thiruvananthapuram,Kerala,0.7,0.82,0.82,0.68,0.78,0.58,"Administrative, employment and education hub; scenario assumption",synthetic_scenario_assumption,scenario_2026,0.735,0.7390000000000001,0.7370000000000001
+MAA,Chennai,Tamil Nadu,0.98,0.98,0.92,0.58,0.98,0.9,"Large employment, industry and education hub; scenario assumption",synthetic_scenario_assumption,scenario_2026,0.928,0.866,0.897
+CBE,Coimbatore,Tamil Nadu,0.72,0.82,0.78,0.48,0.85,0.68,"Industry, employment and education influence; scenario assumption",synthetic_scenario_assumption,scenario_2026,0.7545000000000001,0.7144999999999999,0.7344999999999999

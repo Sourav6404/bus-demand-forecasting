@@ -71,16 +71,20 @@ class CityConfig:
     latitude: float
     longitude: float
 
+    @property
+    def city(self) -> str:
+        return self.city_name
+
 
 TARGET_CITIES: List[CityConfig] = [
     CityConfig("BLR", "Bengaluru", "Karnataka", 1, 12.9716, 77.5946),
     CityConfig("MYS", "Mysuru", "Karnataka", 2, 12.2958, 76.6394),
     CityConfig("MAA", "Chennai", "Tamil Nadu", 1, 13.0827, 80.2707),
-    CityConfig("CJB", "Coimbatore", "Tamil Nadu", 2, 11.0168, 76.9558),
+    CityConfig("CBE", "Coimbatore", "Tamil Nadu", 2, 11.0168, 76.9558),
     CityConfig("COK", "Kochi", "Kerala", 2, 9.9312, 76.2673),
     CityConfig("CCJ", "Kozhikode", "Kerala", 2, 11.2588, 75.7804),
     CityConfig("TCR", "Thrissur", "Kerala", 2, 10.5276, 76.2144),
-    CityConfig("TRV", "Thiruvananthapuram", "Kerala", 2, 8.5241, 76.9366),
+    CityConfig("TVM", "Thiruvananthapuram", "Kerala", 2, 8.5241, 76.9366),
 ]
 
 CITY_ID_TO_NAME: Dict[str, str] = {c.city_id: c.city_name for c in TARGET_CITIES}

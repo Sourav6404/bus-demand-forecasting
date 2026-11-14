@@ -36,22 +36,27 @@ Where:
 
 ## 3. Socioeconomic City Profile Indices
 
-Each of the 8 cities is assigned standardized, empirical-anchored scores normalized between 0.0 and 10.0 across six core dimensions:
+Each of the 8 cities is assigned synthetic component scores normalized on a **0.0 to 1.0 scale** across six core dimensions. These scores represent controlled scenario modelling assumptions:
 
-1. **Urban Scale ($S_u$):** Population density, urban agglomeration size, and metropolitan tier status.
-2. **Employment Score ($S_{emp}$):** Concentration of IT, manufacturing, industrial corridors, and corporate headquarters.
-3. **Education Score ($S_{edu}$):** Density of premier universities, engineering/medical colleges, and student migration catchment.
-4. **Tourism Score ($S_{tour}$):** Heritage, religious, pilgrimage, eco-tourism, and leisure visitor attractions.
-5. **Economic Activity Score ($S_{econ}$):** Commercial banking, wholesale trade, retail intensity, and per-capita GDP contribution.
-6. **Migration Score ($S_{mig}$):** Net interstate and interdistrict workforce migration flux.
+1. **Urban Scale ($S_u$):** Relative population concentration and metropolitan scale.
+2. **Employment Score ($S_{emp}$):** Concentration of IT, manufacturing, industrial corridors, and corporate workforce.
+3. **Education Score ($S_{edu}$):** Density of premier universities, colleges, and student migration catchment.
+4. **Tourism Score ($S_{tour}$):** Heritage, religious, pilgrimage, and leisure visitor attractions.
+5. **Economic Activity Score ($S_{econ}$):** Commercial banking, wholesale trade, retail, and regional enterprise activity.
+6. **Migration Score ($S_{mig}$):** Interstate and interdistrict workforce and student mobility flux.
 
-### Derived Indices
+### Derived Indices & Weight Formulation
 - **Demand Generation Index ($DGI$):**
-  $$DGI = 0.30 \cdot S_u + 0.25 \cdot S_{emp} + 0.20 \cdot S_{econ} + 0.15 \cdot S_{mig} + 0.10 \cdot S_{edu}$$
+  $$DGI = 0.10 \cdot S_u + 0.25 \cdot S_{emp} + 0.20 \cdot S_{edu} + 0.05 \cdot S_{tour} + 0.15 \cdot S_{econ} + 0.25 \cdot S_{mig}$$
+  *Rationale:* Generation places higher weight on employment, education, and migration as primary drivers of outbound intercity trips.
+
 - **Demand Attraction Index ($DAI$):**
-  $$DAI = 0.25 \cdot S_{emp} + 0.25 \cdot S_{econ} + 0.25 \cdot S_{tour} + 0.15 \cdot S_{edu} + 0.10 \cdot S_u$$
+  $$DAI = 0.10 \cdot S_u + 0.20 \cdot S_{emp} + 0.10 \cdot S_{edu} + 0.25 \cdot S_{tour} + 0.25 \cdot S_{econ} + 0.10 \cdot S_{mig}$$
+  *Rationale:* Attraction places higher weight on commercial activity, tourism, and employment opportunities as destination draws.
+
 - **City Mobility Index ($CMI$):**
-  $$CMI = \frac{DGI + DAI}{2} \cdot \left(1 + 0.05 \cdot \text{scale\_bonus}\right)$$
+  $$CMI = \frac{DGI + DAI}{2}$$
+  *Rationale:* Provides a balanced summary indicator of total corridor mobility participation.
 
 ---
 
