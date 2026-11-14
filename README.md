@@ -105,8 +105,8 @@ All simulation components reference a centralized deterministic seed (`RANDOM_SE
 python -c "import src.config as cfg; print(f'Config OK: {cfg.SIMULATION_YEARS} years, {len(cfg.TARGET_CITIES)} cities, seed={cfg.DEFAULT_RANDOM_SEED}')"
 ```
 
-### 5. Generate Base Reference Datasets
-Generate the validated reference datasets:
+### 5. Generate Reference & Simulation Datasets
+Generate the validated reference datasets and synthetic passenger demand:
 ```bash
 # 1. Generate 8 scenario-based city profiles
 python src/data/generate_city_profiles.py
@@ -117,7 +117,13 @@ python src/data/generate_route_profiles.py
 # 3. Generate 3-year calendar features & official holiday registry (1,096 days)
 python src/data/generate_calendar_features.py
 
-# 4. Run full automated test suite (41 tests)
+# 4. Generate 87,680 synthetic trip-level passenger demand records (Stage 6)
+python src/data/generate_trip_demand.py
+
+# 5. Generate EDA report and Jupyter notebook
+python src/data/generate_eda_report.py
+
+# 6. Run full automated test suite (59 tests)
 pytest tests/ -v
 ```
 
@@ -133,19 +139,31 @@ pytest tests/ -v
 │   │   ├── city_profiles.csv       <- 8 South Indian hub profiles & mobility indices
 │   │   ├── route_profiles.csv      <- 20 directed intercity route features
 │   │   ├── calendar_features.csv   <- 1,096-day calendar matrix (2024-2026)
-│   │   └── holiday_events.csv      <- 160 official gazetted state holiday events
-│   ├── generated/      <- Synthetic simulation outputs (corridor demand, departures)
-│   └── processed/      <- Cleaned, feature-engineered matrices ready for modeling
+│   │   └── holiday_events.csv      <- 165 official and cultural holiday events
+│   ├── generated/      <- Intermediate simulation artifacts
+│   └── processed/      <- Processed modeling matrices
+│       └── trip_demand.csv         <- 87,680 scheduled trip passenger demand records
 ├── src/
 │   ├── __init__.py
 │   ├── config.py       <- Centralized project configuration & seed control
 │   ├── data/           <- Data generation, ingestion, validation scripts
+│   │   ├── generate_city_profiles.py
+│   │   ├── generate_route_profiles.py
+│   │   ├── generate_calendar_features.py
+│   │   ├── generate_trip_demand.py
+│   │   └── generate_eda_report.py
 │   ├── features/       <- Feature extraction, encoders, lag transformers
 │   ├── models/         <- Model definitions, training scripts, tuning routines
 │   ├── evaluation/     <- Performance metrics, backtesting, residual diagnostics
 │   └── api/            <- REST API endpoints, schemas, request/response models
 ├── notebooks/          <- Exploratory data analysis and experimental prototypes
+│   └── 01_trip_demand_eda.ipynb    <- Interactive trip passenger demand EDA
 ├── artifacts/          <- Serialized models, encoders, and evaluation metadata
 ├── reports/            <- Generated performance reports, figures, and metrics
-└── tests/              <- Unit and integration test suite
+│   └── trip_demand_eda.md          <- Comprehensive Stage 6 EDA summary report
+└── tests/              <- Unit and integration test suite (59 tests)
+    ├── test_city_profiles.py
+    ├── test_route_profiles.py
+    ├── test_calendar_features.py
+    └── test_trip_demand.py
 ```

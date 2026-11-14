@@ -206,7 +206,110 @@ In the route network, each route $i \to j$ spans an origin state and a destinati
 
 ---
 
-## 7. Reproducibility & Validation Principles
+## 7. Stage 6 – Synthetic Passenger Demand Simulation Architecture
+
+Stage 6 produces the core trip-level forecasting benchmark dataset (`data/processed/trip_demand.csv`), comprising **87,680 records** across 20 directed corridors, 1,096 calendar dates, and 4 daily departures.
+
+> [!IMPORTANT]
+> **Synthetic Modelling Notice:** This dataset represents controlled scenario simulation constructed from transport economics and empirical choice principles. It does **not** contain proprietary passenger bookings, GPS telemetry, or live ticketing registers from state or private transit operators.
+
+### A. Prediction Target, Forecast Horizon & Metadata Definition
+- **Target Variable:** `passenger_demand` (Discrete, non-negative integer count).
+  - *Definition:* The total number of passengers who attempted to reserve or requested travel on a specific scheduled bus departure.
+  - *Unconstrained Requested Demand:* Demand is **not** artificially capped at coach capacity ($N = 45$). Demand and capacity are distinct physical concepts: `passenger_demand` reflects total simulated booking requests, whereas physical coach occupancy cannot exceed 45 seats. Extreme values (such as the maximum simulated demand of 195 passengers on peak festive sleeper departures) represent intense booking demand attempting to reserve a single bus, resulting in 45 seated passengers and 150 unserved/waitlisted requests.
+- **Forecast Horizon & Prediction Cutoff:**
+  - *Forecast Horizon:* **24 hours prior to scheduled departure**.
+  - *Prediction Cutoff Time:* $T_{\text{departure}} - 24.0\text{ hours}$.
+  - *Information Availability Assumption at Cutoff:* The cutoff assumes that calendar features, schedule timetables, and planned gazetted holiday dates are known in advance. However, in operational reality, certain holiday dates (such as Islamic observances like Eid-ul-Fitr and Bakrid) depend on lunar sightings confirmed closer to the date, and occasional ad-hoc government declarations occur. In this synthetic baseline, planned gazette dates serve as deterministic scenario features available at cutoff.
+- **Feature Typing & Machine Learning Usage Guidelines:**
+  - `trip_id` is a composite primary key / audit metadata string (e.g., `TRIP_R_BLR_COK_20241031_DEP_04`) designed strictly for indexing, joins, and logging. **It must NOT be passed directly as a feature into machine learning models.**
+  - `route_id`, `origin_city_id`, `destination_city_id`, and `departure_slot` represent discrete entity identifiers and must be encoded appropriately as categorical variables (e.g., Target Encoding, One-Hot Encoding, or CatBoost/LightGBM native categorical handles).
+- **Strict Target Segregation (No Target Leakage):**
+  - **Prediction Features (Available at $T - 24\text{h}$):** Route characteristics, scheduled time, calendar dimensions, holiday indicators, vacation flags, physical coach capacity.
+  - **Target & Operational Fields (Excluded from Model Inputs):** `passenger_demand`, `capacity_exceeded` ($= \text{demand} > 45$), and `estimated_unserved_demand` ($= \max(0, \text{demand} - 45)$).
+
+### B. Mathematical Demand Generation Formulation
+The expected passenger demand rate $\mu_{ijst}$ for corridor $i \to j$, departure slot $s$, on date $t$ is formulated as a multiplicative behavioral model:
+
+$$\mu_{ijst} = \text{BaseRate}_{ij} \cdot M_{\text{slot}}(d_{ij}, s) \cdot M_{\text{dow}}(i, j, s, t) \cdot M_{\text{season}}(t, i, j) \cdot M_{\text{hol}}(t, i, j) \cdot M_{\text{vac}}(t, i, j)$$
+
+Where:
+1. **Base Rate (Avoiding Double-Counting):**
+   $$\text{BaseRate}_{ij} = \mu_0 \cdot \text{RMS}_{ij} \cdot \text{RDM}_{ij}$$
+   - Baseline scaling factor $\mu_0 = 37.5$ seats.
+   - $\text{RMS}_{ij}$: Route mobility score (derived from origin generation and destination attraction indices).
+   - $\text{RDM}_{ij}$: Direction-specific static baseline multiplier.
+   - *Rule:* Granular $(DGI_o \cdot DAI_d)$ is **not** multiplied with $\text{RMS}_{ij}$, strictly adhering to the double-counting avoidance principle established in Section 4.C.
+
+2. **Distance-Slot Interaction ($M_{\text{slot}}$):**
+   Captures passenger departure time preferences as a function of corridor journey distance:
+   - **Short Corridors ($d < 250$ km):** Morning business commuter peak (`DEP_01`, 06:00: $\times 1.18$) and evening return peak (`DEP_03`, 17:00: $\times 1.22$); off-peak midday (`DEP_02`: $\times 0.88$) and night (`DEP_04`: $\times 0.72$).
+   - **Long Corridors ($d \ge 250$ km):** Overnight sleeper preference dominates (`DEP_04`, 22:30: $\times 1.28$); steady morning daytime (`DEP_01`: $\times 1.00$), evening (`DEP_03`: $\times 1.02$), and low midday (`DEP_02`: $\times 0.78$).
+
+3. **Day-of-Week & Directional Commuter Flow ($M_{\text{dow}}$):**
+   Models metropolitan workforce mobility centered on Tier 1 economic engines (Bengaluru `BLR` and Chennai `MAA`):
+   - **Friday Outbound Surge:** Workforce departing BLR/MAA for hometowns: evening/night slots surge by $\times 1.35$.
+   - **Sunday Return Rush:** Hometown travelers returning to BLR/MAA: evening/night slots surge by $\times 1.38$.
+   - **Midweek Baseline:** Tuesday and Wednesday exhibit steady commercial baseline ($\times 0.90$).
+
+4. **Seasonal Dynamics ($M_{\text{season}}$):**
+   - Post-Monsoon (Oct–Dec): $\times 1.08$ (festive quarter, pleasant weather).
+   - Summer (Mar–May): $\times 1.08$ (annual holiday mobility).
+   - Winter (Jan–Feb): $\times 1.02$.
+   - Monsoon (Jun–Sep): $\times 0.88$ for corridors serving Kerala (South-West monsoon road dampening); $\times 0.94$ elsewhere.
+   - Month boundary bump ($\times 1.03$) on 1st/last days of month.
+
+5. **Holiday & Festival Surges ($M_{\text{hol}}$):**
+   - Directional long-weekend flow ($\times 1.25$ outbound, $\times 1.28$ inbound return).
+   - Pre-holiday outbound surge ($\times 1.15$) and post-holiday return flow ($\times 1.12$).
+   - Destination festival draw ($\times 1.15$) for major regional festivals (Onam, Pongal, Diwali).
+   - Combined holiday multiplier is capped at $\le 1.65$ to prevent compounding explosion.
+
+6. **Vacation Effects ($M_{\text{vac}}$):**
+   - School vacations introduce weekend family travel increments ($\times 1.08$).
+   - College vacations stimulate student corridor travel ($\times 1.04$ to $\times 1.05$).
+
+### C. Stochastic Negative Binomial Sampling
+To generate discrete passenger counts with realistic party-size overdispersion ($\text{Var} > \text{Mean}$), arrival volume is sampled from a Negative Binomial distribution:
+
+$$Y_{ijst} \sim \text{NegBinomial}(n, p)$$
+
+Where dispersion parameter $\alpha = 0.04$:
+$$n = \frac{1}{\alpha} = 25.0, \quad p = \frac{n}{n + \mu_{ijst}} = \frac{25.0}{25.0 + \mu_{ijst}}$$
+
+- **Rationale:** Models group arrivals (solo travelers, pairs, families of 3–4).
+- **Properties:** Produces strictly non-negative integers natively without artificial truncation or negative rounding.
+- **Reproducibility:** Seeded with `DEFAULT_RANDOM_SEED = 42`.
+
+### D. Worked Demand Calculation Example
+**Trip:** `TRIP_R_BLR_COK_20241031_DEP_04`
+- **Route:** Bengaluru $\to$ Kochi (`R_BLR_COK`), $d = 540$ km ($d \ge 250$).
+- **Departure:** 2024-10-31 (Thursday), 22:30 (`DEP_04`, Night Sleeper).
+- **Date Features:** Diwali festival day (`is_holiday_ka = True`, `is_holiday_kl = True`, `is_month_end = True`, Season = Post-Monsoon).
+1. $\text{BaseRate} = 37.5 \cdot 0.8868 \cdot 1.28 = 42.57$
+2. $M_{\text{slot}} = 1.28$ (Long distance night sleeper)
+3. $M_{\text{dow}} = 0.96$ (Thursday)
+4. $M_{\text{season}} = 1.08 \cdot 1.03 = 1.112$ (Post-Monsoon + Month-end)
+5. $M_{\text{hol}} = 1.15 \cdot 1.06 = 1.219$ (Destination & Origin Diwali holiday)
+6. $M_{\text{vac}} = 1.00$
+7. $\mu = 42.57 \cdot 1.28 \cdot 0.96 \cdot 1.112 \cdot 1.219 \approx 70.93$ passengers expected.
+8. With $\mu = 70.93$, $p = 25 / (25 + 70.93) = 0.2606$.
+9. Sampling yields $Y = 74$ passengers.
+10. Operational outcomes: `bus_capacity = 45`, `capacity_exceeded = True`, `estimated_unserved_demand = 74 - 45 = 29` unserved passengers (simulating a sold-out run with 29 waitlisted travelers).
+
+### E. Summary of Exploratory Data Analysis (EDA) Findings
+- **Total Simulated Trips:** 87,680 scheduled departures.
+- **Mean Passenger Demand:** **35.76 seats** (average load factor: **79.5%**).
+- **Standard Deviation:** **15.70** (strong variation, IQR: 25.0 – 44.0).
+- **Capacity-Exceeded Rate:** **22.07%** of trips exceed the 45-seat physical limit, generating **263,766 total unserved passengers** across the 3-year network. This figure is an emergent result of the specific parameters and multipliers chosen in this synthetic simulation scenario, not an empirically verified measurement of actual commercial bus operations.
+- **Top Corridor:** Bengaluru $\leftrightarrow$ Chennai (`R_BLR_MAA`: mean 49.84).
+- **Lowest Corridor:** Thrissur $\leftrightarrow$ Kozhikode (`R_TCR_CCJ`: mean 23.70).
+- **Demand Range & Outliers:** Minimum demand is 2 passengers (off-peak midday run); maximum demand reaches 195 passengers on peak festive sleeper departures (representing intense booking interest rather than physical bus occupancy).
+- **Artifacts:** Full analysis available in [reports/trip_demand_eda.md](../reports/trip_demand_eda.md) and [notebooks/01_trip_demand_eda.ipynb](../notebooks/01_trip_demand_eda.ipynb).
+
+---
+
+## 8. Reproducibility & Validation Principles
 
 1. **Fixed Seed:** All pseudo-random sampling (NumPy RNG) is initialized with seed `42`.
 2. **Boundary Realism:** Passenger demand is constrained by physical coach capacity ($N = 45$ seats) with latent unfulfilled demand tracking (simulating waitlists/sold-out runs).
